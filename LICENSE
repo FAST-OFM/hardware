@@ -1,0 +1,12 @@
+Fast OFM hardware licensing notice
+
+No single license applies to every file in this repository.
+
+Original Fast OFM hardware design documentation is licensed under
+CC BY-NC-SA 4.0. Original software utilities and tests are licensed under the
+PolyForm Noncommercial License 1.0.0. Neither license grants commercial use.
+
+See LICENSING.md and REUSE.toml for the authoritative file boundary. Complete
+license texts are stored in LICENSES/.
+
+Copyright 2026 Alexander Fridman.

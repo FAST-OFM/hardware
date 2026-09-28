@@ -1,0 +1,710 @@
+{
+  "schema_version": "evidence-status/v1",
+  "document_id": "homing-readiness-evidence-status",
+  "description": "Offline evidence-status snapshot for issue 11 homing readiness and sensorless homing feasibility. This file is documentation/data only and does not approve firmware flashing, GPIO toggling, motor enable, axis motion, hard-stop homing, sensorless homing, probing live devices, or other live hardware action.",
+  "required_unknowns": [
+    "controller_identity.motion_controller_exact_board",
+    "pin_mapping.motion.one_axis_candidate",
+    "output_state.motor_driver_enable_at_boot",
+    "driver_capability.x_axis",
+    "driver_capability.y_axis",
+    "driver_capability.z_axis",
+    "endstop_input.x_axis",
+    "endstop_input.y_axis",
+    "endstop_input.z_axis",
+    "homing_capability.x_axis",
+    "homing_capability.y_axis",
+    "homing_capability.z_axis",
+    "sensorless_feasibility.x_axis",
+    "sensorless_feasibility.y_axis",
+    "sensorless_feasibility.z_axis",
+    "test_prerequisite.no_motion_homing_readiness",
+    "test_prerequisite.one_axis_low_speed_motion",
+    "approval.homing_readiness",
+    "approval.no_motion_homing_readiness_test",
+    "approval.one_axis_low_speed_motion_test"
+  ],
+  "unknown_blocker_summary": {
+    "scope": "issue_11_homing_readiness_and_sensorless_feasibility",
+    "summary_status": "blocked_by_unknowns",
+    "unknown_entry_ids": [
+      "controller_identity.motion_controller_exact_board",
+      "pin_mapping.motion.one_axis_candidate",
+      "output_state.motor_driver_enable_at_boot",
+      "driver_capability.x_axis",
+      "driver_capability.y_axis",
+      "driver_capability.z_axis",
+      "endstop_input.x_axis",
+      "endstop_input.y_axis",
+      "endstop_input.z_axis",
+      "homing_capability.x_axis",
+      "homing_capability.y_axis",
+      "homing_capability.z_axis",
+      "sensorless_feasibility.x_axis",
+      "sensorless_feasibility.y_axis",
+      "sensorless_feasibility.z_axis",
+      "test_prerequisite.no_motion_homing_readiness",
+      "test_prerequisite.one_axis_low_speed_motion",
+      "approval.homing_readiness",
+      "approval.no_motion_homing_readiness_test",
+      "approval.one_axis_low_speed_motion_test"
+    ],
+    "blockers": [
+      {
+        "id": "homing_readiness_unknown",
+        "title": "Homing readiness is not evidence-backed",
+        "blocked_by": [
+          "controller_identity.motion_controller_exact_board",
+          "pin_mapping.motion.one_axis_candidate",
+          "output_state.motor_driver_enable_at_boot",
+          "endstop_input.x_axis",
+          "endstop_input.y_axis",
+          "endstop_input.z_axis",
+          "homing_capability.x_axis",
+          "homing_capability.y_axis",
+          "homing_capability.z_axis",
+          "approval.homing_readiness"
+        ],
+        "blocks": [
+          "marking_homing_ready",
+          "physical_homing_implementation_claim",
+          "scan_workflow_real_hardware_homing",
+          "motion_or_homing_live_test"
+        ],
+        "resolution_evidence_required": "Record exact motion controller identity, motor driver enable behavior, selected homing source per axis, endstop or homing input evidence per axis, Z collision review, and reviewed approval before homing readiness can be known.",
+        "evidence_fields_required": [
+          "exact motion controller board and revision",
+          "candidate one-axis step, direction, enable, and homing input mapping",
+          "motor driver enable boot/reset state",
+          "endstop or homing input pin, connector, polarity, pull-up or pull-down, and voltage tolerance per axis",
+          "selected homing source per axis",
+          "Z slide/objective collision review",
+          "reviewed approval record for homing readiness"
+        ]
+      },
+      {
+        "id": "sensorless_feasibility_unknown",
+        "title": "Sensorless homing feasibility is not evidence-backed",
+        "blocked_by": [
+          "driver_capability.x_axis",
+          "driver_capability.y_axis",
+          "driver_capability.z_axis",
+          "sensorless_feasibility.x_axis",
+          "sensorless_feasibility.y_axis",
+          "sensorless_feasibility.z_axis",
+          "approval.homing_readiness"
+        ],
+        "blocks": [
+          "claiming_sensorless_homing_support",
+          "hard_stop_sensorless_test",
+          "driver_feedback_homing_test",
+          "sensorless_threshold_selection"
+        ],
+        "resolution_evidence_required": "Record exact driver model and datasheet per axis, feedback interface evidence, firmware support, speed/current/threshold constraints, and false-positive/false-negative risk review before sensorless homing feasibility can be known.",
+        "evidence_fields_required": [
+          "exact stepper driver model per axis",
+          "datasheet or board documentation for diagnostic or stall feedback",
+          "feedback exposure by pin, UART/SPI register, firmware state, or not exposed",
+          "firmware support path for driver feedback",
+          "low-speed and reduced-current operating range",
+          "threshold configuration and persistence behavior",
+          "false-positive and false-negative risk review",
+          "hard-stop force risk review"
+        ]
+      },
+      {
+        "id": "safe_no_motion_test_unknown",
+        "title": "Safe no-motion homing readiness test is not evidence-backed",
+        "blocked_by": [
+          "controller_identity.motion_controller_exact_board",
+          "driver_capability.x_axis",
+          "driver_capability.y_axis",
+          "driver_capability.z_axis",
+          "endstop_input.x_axis",
+          "endstop_input.y_axis",
+          "endstop_input.z_axis",
+          "test_prerequisite.no_motion_homing_readiness",
+          "approval.no_motion_homing_readiness_test"
+        ],
+        "blocks": [
+          "powered_no_motion_probe",
+          "live_controller_query",
+          "driver_configuration_readback",
+          "gpio_input_observation_under_control"
+        ],
+        "resolution_evidence_required": "Record exact target identity, reviewed static evidence, rail and logic tolerance evidence, test points, common-reference or isolation plan, and explicit no-motion approval before any powered no-motion homing readiness test.",
+        "evidence_fields_required": [
+          "exact target controller and driver identity",
+          "reviewed static source for each candidate endstop or feedback interface",
+          "rail voltage and logic tolerance evidence",
+          "boot/reset state evidence or unpowered-only scope",
+          "test point and measurement equipment plan",
+          "common-reference or isolation plan",
+          "explicit no-motion-only reviewer approval"
+        ]
+      },
+      {
+        "id": "safe_one_axis_low_speed_test_unknown",
+        "title": "Safe one-axis low-speed motion test is not evidence-backed",
+        "blocked_by": [
+          "pin_mapping.motion.one_axis_candidate",
+          "output_state.motor_driver_enable_at_boot",
+          "test_prerequisite.one_axis_low_speed_motion",
+          "approval.one_axis_low_speed_motion_test"
+        ],
+        "blocks": [
+          "motor_driver_enable",
+          "step_pulse_generation",
+          "axis_motion",
+          "one_axis_direction_test",
+          "one_axis_homing_input_test",
+          "hard_stop_approach"
+        ],
+        "resolution_evidence_required": "Record the exact selected axis, verified step/direction/enable/homing input mapping, reduced current/speed/distance/timeout limits, direction convention, emergency stop or power-off path, and explicit approval before any one-axis low-speed motion test.",
+        "evidence_fields_required": [
+          "selected single axis",
+          "verified step, direction, enable, and homing input mapping for selected axis",
+          "all non-selected axes disabled or otherwise prevented from motion",
+          "driver current limit and thermal margin",
+          "reduced speed, acceleration, travel distance, and timeout",
+          "safe direction convention and soft travel envelope",
+          "observable endstop or feedback behavior before hard-stop reliance",
+          "emergency stop or power-off path verified without motion",
+          "Z exclusion or separate Z collision approval",
+          "explicit reviewer approval naming the selected axis"
+        ]
+      }
+    ]
+  },
+  "live_action_gates": [
+    {
+      "id": "no_motion_homing_readiness_gate",
+      "title": "No-motion homing readiness test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "test_prerequisite.no_motion_homing_readiness",
+        "approval.no_motion_homing_readiness_test",
+        "controller_identity.motion_controller_exact_board"
+      ],
+      "prohibited_actions": [
+        "firmware flashing",
+        "GPIO toggling",
+        "motor driver enable",
+        "step pulse generation",
+        "axis motion",
+        "driver configuration changes",
+        "serial or network live-controller control"
+      ],
+      "evidence_fields_required": [
+        "exact controller and driver identity evidence",
+        "static source for candidate endstop and feedback interfaces",
+        "rail and logic tolerance evidence",
+        "test point and measurement method",
+        "common-reference or isolation plan",
+        "explicit no-motion-only approval"
+      ]
+    },
+    {
+      "id": "one_axis_low_speed_motion_gate",
+      "title": "One-axis low-speed motion test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "test_prerequisite.one_axis_low_speed_motion",
+        "approval.one_axis_low_speed_motion_test",
+        "pin_mapping.motion.one_axis_candidate",
+        "output_state.motor_driver_enable_at_boot"
+      ],
+      "prohibited_actions": [
+        "motor driver enable",
+        "step pulse generation",
+        "axis motion",
+        "axis direction test",
+        "homing input test",
+        "hard-stop approach",
+        "sensorless homing",
+        "Z motion without separate collision approval"
+      ],
+      "evidence_fields_required": [
+        "selected single axis and verified pin mapping",
+        "driver current limit and reduced-current first-test limit",
+        "reduced speed, acceleration, distance, and timeout limits",
+        "safe direction and travel envelope",
+        "emergency stop or power-off path",
+        "endstop or feedback observability plan",
+        "explicit approval naming the selected axis"
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "id": "controller_identity.motion_controller_exact_board",
+      "category": "controller_identity",
+      "subject": "Exact motion controller board for homing readiness",
+      "status": "unknown",
+      "unknown_reason": "The exact controller board, revision, scanner variant, MCU, and firmware base for homing readiness have not been recorded as reviewed evidence for issue 11.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/board.md",
+        "docs/controller-discovery/controller-discovery-status.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown",
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "exact board name and revision",
+        "scanner variant binding",
+        "MCU identity",
+        "firmware base and version",
+        "source for each identity field"
+      ]
+    },
+    {
+      "id": "pin_mapping.motion.one_axis_candidate",
+      "category": "pin_mapping",
+      "subject": "Candidate one-axis step, direction, enable, and homing input mapping",
+      "status": "unknown",
+      "unknown_reason": "No selected single axis has verified step, direction, enable, and homing input mapping for a future low-speed test.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown",
+        "safe_one_axis_low_speed_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "selected axis",
+        "step pin",
+        "direction pin",
+        "enable pin",
+        "endstop or homing input pin",
+        "logic voltage and tolerance",
+        "reviewed source for each mapping"
+      ]
+    },
+    {
+      "id": "output_state.motor_driver_enable_at_boot",
+      "category": "output_state",
+      "subject": "Motor driver enable state at boot/reset",
+      "status": "unknown",
+      "unknown_reason": "Motor driver enable default state at controller boot/reset has not been verified for homing readiness.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md",
+        "docs/hardware-safety-guardrails.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown",
+        "safe_one_axis_low_speed_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "driver enable pin mapping",
+        "boot/reset enable state",
+        "safe disabled state evidence",
+        "mitigation if default state can energize motors"
+      ]
+    },
+    {
+      "id": "driver_capability.x_axis",
+      "category": "driver_capability",
+      "subject": "X-axis stepper driver capability for homing and sensorless feedback",
+      "status": "unknown",
+      "unknown_reason": "The X-axis driver model, current limit, thermal margin, and any diagnostic or stall feedback interface are not recorded as reviewed evidence.",
+      "evidence_refs": [
+        "mechanics/homing/pico-sensorless-homing-feasibility.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "sensorless_feasibility_unknown",
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "exact driver model",
+        "driver package or module evidence",
+        "datasheet reference",
+        "current limit or Vref",
+        "thermal margin",
+        "diagnostic or stall feedback presence and exposure"
+      ]
+    },
+    {
+      "id": "driver_capability.y_axis",
+      "category": "driver_capability",
+      "subject": "Y-axis stepper driver capability for homing and sensorless feedback",
+      "status": "unknown",
+      "unknown_reason": "The Y-axis driver model, current limit, thermal margin, and any diagnostic or stall feedback interface are not recorded as reviewed evidence.",
+      "evidence_refs": [
+        "mechanics/homing/pico-sensorless-homing-feasibility.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "sensorless_feasibility_unknown",
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "exact driver model",
+        "driver package or module evidence",
+        "datasheet reference",
+        "current limit or Vref",
+        "thermal margin",
+        "diagnostic or stall feedback presence and exposure"
+      ]
+    },
+    {
+      "id": "driver_capability.z_axis",
+      "category": "driver_capability",
+      "subject": "Z-axis stepper driver capability for homing and sensorless feedback",
+      "status": "unknown",
+      "unknown_reason": "The Z-axis driver model, current limit, thermal margin, and any diagnostic or stall feedback interface are not recorded as reviewed evidence.",
+      "evidence_refs": [
+        "mechanics/homing/pico-sensorless-homing-feasibility.md",
+        "mechanics/homing/homing-readiness-evidence.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "sensorless_feasibility_unknown",
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "exact driver model",
+        "driver package or module evidence",
+        "datasheet reference",
+        "current limit or Vref",
+        "thermal margin",
+        "diagnostic or stall feedback presence and exposure",
+        "Z collision implication review"
+      ]
+    },
+    {
+      "id": "endstop_input.x_axis",
+      "category": "endstop_input",
+      "subject": "X-axis endstop or homing input",
+      "status": "unknown",
+      "unknown_reason": "X-axis endstop or homing input pin, connector, polarity, pull behavior, wiring, and noise handling have not been verified.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown",
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "input pin",
+        "connector and wiring path",
+        "active polarity",
+        "pull-up or pull-down behavior",
+        "voltage tolerance",
+        "debounce or noise plan",
+        "strain relief"
+      ]
+    },
+    {
+      "id": "endstop_input.y_axis",
+      "category": "endstop_input",
+      "subject": "Y-axis endstop or homing input",
+      "status": "unknown",
+      "unknown_reason": "Y-axis endstop or homing input pin, connector, polarity, pull behavior, wiring, and noise handling have not been verified.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown",
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "input pin",
+        "connector and wiring path",
+        "active polarity",
+        "pull-up or pull-down behavior",
+        "voltage tolerance",
+        "debounce or noise plan",
+        "strain relief"
+      ]
+    },
+    {
+      "id": "endstop_input.z_axis",
+      "category": "endstop_input",
+      "subject": "Z-axis endstop or homing input",
+      "status": "unknown",
+      "unknown_reason": "Z-axis endstop or homing input pin, connector, polarity, pull behavior, wiring, noise handling, and collision-safe placement have not been verified.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/homing-readiness-evidence.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown",
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "input pin",
+        "connector and wiring path",
+        "active polarity",
+        "pull-up or pull-down behavior",
+        "voltage tolerance",
+        "debounce or noise plan",
+        "strain relief",
+        "collision-safe placement review"
+      ]
+    },
+    {
+      "id": "homing_capability.x_axis",
+      "category": "homing_capability",
+      "subject": "X-axis homing capability",
+      "status": "unknown",
+      "unknown_reason": "No X-axis homing source, input behavior, repeatability evidence, safe limits, or test approval is recorded.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/homing-design-rules.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown"
+      ],
+      "evidence_fields_required": [
+        "selected homing source",
+        "homing input or feedback behavior",
+        "safe speed and current limits",
+        "timeout and backoff plan",
+        "repeatability plan"
+      ]
+    },
+    {
+      "id": "homing_capability.y_axis",
+      "category": "homing_capability",
+      "subject": "Y-axis homing capability",
+      "status": "unknown",
+      "unknown_reason": "No Y-axis homing source, input behavior, repeatability evidence, safe limits, or test approval is recorded.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/homing-design-rules.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown"
+      ],
+      "evidence_fields_required": [
+        "selected homing source",
+        "homing input or feedback behavior",
+        "safe speed and current limits",
+        "timeout and backoff plan",
+        "repeatability plan"
+      ]
+    },
+    {
+      "id": "homing_capability.z_axis",
+      "category": "homing_capability",
+      "subject": "Z-axis homing capability",
+      "status": "unknown",
+      "unknown_reason": "No Z-axis homing source, input behavior, repeatability evidence, safe limits, slide/objective collision review, or test approval is recorded.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/homing-design-rules.md",
+        "mechanics/homing/homing-readiness-evidence.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown"
+      ],
+      "evidence_fields_required": [
+        "selected Z homing source",
+        "homing input or feedback behavior",
+        "safe speed and current limits",
+        "timeout and backoff plan",
+        "slide/objective collision review",
+        "repeatability plan"
+      ]
+    },
+    {
+      "id": "sensorless_feasibility.x_axis",
+      "category": "sensorless_feasibility",
+      "subject": "X-axis sensorless homing feasibility",
+      "status": "unknown",
+      "unknown_reason": "No reviewed evidence establishes X-axis driver feedback support, feedback exposure, firmware support, safe thresholds, or hard-stop risk controls.",
+      "evidence_refs": [
+        "mechanics/homing/pico-sensorless-homing-feasibility.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "sensorless_feasibility_unknown"
+      ],
+      "evidence_fields_required": [
+        "driver feedback mechanism",
+        "feedback exposure path",
+        "firmware support path",
+        "low-speed behavior",
+        "threshold configuration",
+        "false-positive and false-negative risk review",
+        "hard-stop force risk review"
+      ]
+    },
+    {
+      "id": "sensorless_feasibility.y_axis",
+      "category": "sensorless_feasibility",
+      "subject": "Y-axis sensorless homing feasibility",
+      "status": "unknown",
+      "unknown_reason": "No reviewed evidence establishes Y-axis driver feedback support, feedback exposure, firmware support, safe thresholds, or hard-stop risk controls.",
+      "evidence_refs": [
+        "mechanics/homing/pico-sensorless-homing-feasibility.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "sensorless_feasibility_unknown"
+      ],
+      "evidence_fields_required": [
+        "driver feedback mechanism",
+        "feedback exposure path",
+        "firmware support path",
+        "low-speed behavior",
+        "threshold configuration",
+        "false-positive and false-negative risk review",
+        "hard-stop force risk review"
+      ]
+    },
+    {
+      "id": "sensorless_feasibility.z_axis",
+      "category": "sensorless_feasibility",
+      "subject": "Z-axis sensorless homing feasibility",
+      "status": "unknown",
+      "unknown_reason": "No reviewed evidence establishes Z-axis driver feedback support, feedback exposure, firmware support, safe thresholds, hard-stop risk controls, or slide/objective collision safety.",
+      "evidence_refs": [
+        "mechanics/homing/pico-sensorless-homing-feasibility.md",
+        "mechanics/homing/homing-readiness-evidence.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "sensorless_feasibility_unknown"
+      ],
+      "evidence_fields_required": [
+        "driver feedback mechanism",
+        "feedback exposure path",
+        "firmware support path",
+        "low-speed behavior",
+        "threshold configuration",
+        "false-positive and false-negative risk review",
+        "hard-stop force risk review",
+        "slide/objective collision review"
+      ]
+    },
+    {
+      "id": "test_prerequisite.no_motion_homing_readiness",
+      "category": "test_prerequisite",
+      "subject": "Safe no-motion homing readiness test prerequisites",
+      "status": "unknown",
+      "unknown_reason": "No reviewed no-motion test prerequisite record exists for homing readiness; live controller access, GPIO toggling, driver configuration, and motion remain prohibited.",
+      "evidence_refs": [
+        "mechanics/homing/homing-readiness-evidence.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "exact controller and driver identity",
+        "static interface source evidence",
+        "rail and logic tolerance evidence",
+        "boot/reset state evidence or unpowered-only scope",
+        "test point plan",
+        "common-reference or isolation plan",
+        "explicit no-motion-only scope"
+      ]
+    },
+    {
+      "id": "test_prerequisite.one_axis_low_speed_motion",
+      "category": "test_prerequisite",
+      "subject": "Safe one-axis low-speed motion test prerequisites",
+      "status": "unknown",
+      "unknown_reason": "No reviewed one-axis low-speed motion prerequisite record exists; motor enable, step pulses, axis motion, hard-stop approach, and homing remain prohibited.",
+      "evidence_refs": [
+        "mechanics/homing/homing-readiness-evidence.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "safe_one_axis_low_speed_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "selected axis",
+        "verified selected-axis pin mapping",
+        "non-selected axes disabled",
+        "driver current limit and thermal margin",
+        "reduced speed, acceleration, distance, and timeout",
+        "safe direction and travel envelope",
+        "observable endstop or feedback behavior",
+        "emergency stop or power-off path",
+        "Z exclusion or separate Z collision approval"
+      ]
+    },
+    {
+      "id": "approval.homing_readiness",
+      "category": "approval",
+      "subject": "Approval to treat homing readiness evidence as known",
+      "status": "unknown",
+      "unknown_reason": "No reviewer has approved homing readiness evidence as complete for issue 11.",
+      "evidence_refs": [
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "homing_readiness_unknown",
+        "sensorless_feasibility_unknown"
+      ],
+      "evidence_fields_required": [
+        "reviewer",
+        "date",
+        "evidence refs",
+        "scope approved",
+        "remaining prohibited actions"
+      ]
+    },
+    {
+      "id": "approval.no_motion_homing_readiness_test",
+      "category": "approval",
+      "subject": "Approval for no-motion homing readiness test",
+      "status": "unknown",
+      "unknown_reason": "No reviewer approval exists for a no-motion homing readiness test.",
+      "evidence_refs": [
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "safe_no_motion_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "reviewer",
+        "date",
+        "explicit no-motion-only scope",
+        "prohibited live actions",
+        "evidence refs"
+      ]
+    },
+    {
+      "id": "approval.one_axis_low_speed_motion_test",
+      "category": "approval",
+      "subject": "Approval for one-axis low-speed motion test",
+      "status": "unknown",
+      "unknown_reason": "No reviewer approval exists for a one-axis low-speed motion test.",
+      "evidence_refs": [
+        "mechanics/homing/homing-readiness-evidence.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "safe_one_axis_low_speed_test_unknown"
+      ],
+      "evidence_fields_required": [
+        "reviewer",
+        "date",
+        "selected axis",
+        "reduced limits approved",
+        "Z exclusion or Z collision approval",
+        "prohibited out-of-scope axes and actions",
+        "evidence refs"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+# LEGACY CANDIDATE ONLY. This is not the configuration observed in the accepted
+# prototype scan and must not be used to drive hardware. In particular, its
+# WHITE-gate PB13 candidate is superseded by observed PB14 in
+# observed-prototype-pins.yaml.
+schema: scanner_board_profile/v0
+profile:
+  id: mks-robin-mini-v2-scanner
+  board_name: MKS Robin Mini V2.0
+  pcb_code: M-M-B-A-00526
+  scope: current scanner MKS/Kingroon context only
+  state: pinmap_candidate
+  accepted_prototype_configuration: false
+  superseded_for_accepted_prototype: true
+  hardware_approval: false
+  simulator_only_until: pinmap_verified
+  evidence_refs:
+    - docs/controller-discovery/controller-board-discovery.md
+    - docs/controller-discovery/controller-discovery-status.md
+    - electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md
+    - evidence/rev-a5-evidence-status.example.json
+
+mcu:
+  family: STM32F103-family
+  evidence_status: documented_from_current_klipper_deployment
+  exact_part: unknown
+  voltage_levels: unknown
+  flashing_method: unknown
+  debug_method: unknown
+  evidence_refs:
+    - docs/controller-discovery/controller-discovery-status.md
+
+motion:
+  v1_manual_centered_bounded_test:
+    status: proposal_pending_explicit_approval
+    normal_scan_workflow: false
+    homing_required_for_this_test: false
+    homing_commands_allowed: false
+    manual_center_required: true
+    xy_limit_mm_from_manual_center: 10
+    xy_initial_speed_mm_s: "0.5-1"
+    xy_initial_accel_mm_s2: "5-10"
+    z_homing_required_for_this_test: false
+    z_homing_commands_allowed: false
+    z_motion_allowed_only_for_focus_search: true
+    z_focus_search_range_mm: unknown
+    stop_path:
+      - Fluidd emergency stop
+      - physical power removal
+    note: "This is a V1 bounded non-scan bring-up mode only. It does not satisfy production homing requirements."
+  homing:
+    configured: false
+    limit_switches_connected: false
+    enable_gate: disabled_until_pinmap_verified_and_homing_evidence_reviewed
+    future_boundary_detection: pico_or_driver_based_possible_not_proven
+    evidence_refs:
+      - docs/controller-discovery/controller-discovery-status.md
+      - mechanics/homing/README.md
+      - evidence/controller-board-discovery-evidence-status.example.json
+  stepper_drivers:
+    type: A4988
+    configuration_method: unknown
+    current_limit: unknown
+    vref: unknown
+    thermal_margin: unknown
+    sensorless_feedback: none_documented
+    evidence_refs:
+      - docs/controller-discovery/controller-discovery-status.md
+      - mechanics/homing/README.md
+  axes:
+    x:
+      motor_class: NEMA 11
+      screw_pitch_mm_per_rev: 2
+      step_pin: unknown
+      dir_pin: unknown
+      enable_pin: unknown
+      endstop_pin: unknown
+      homing_verified: false
+    y:
+      motor_class: NEMA 11
+      screw_pitch_mm_per_rev: 2
+      step_pin: unknown
+      dir_pin: unknown
+      enable_pin: unknown
+      endstop_pin: unknown
+      homing_verified: false
+    z:
+      motor_class: NEMA 11
+      screw_pitch_mm_per_rev: 0.5
+      step_pin: unknown
+      dir_pin: unknown
+      enable_pin: unknown
+      endstop_pin: unknown
+      homing_verified: false
+
+candidate_signals:
+  hq_xvs_sync:
+    pin: PD6
+    connector_label: E0_STEP
+    signal: HQ Camera XVS sync
+    channel: HQ_XVS_SYNC
+    evidence_status: documented_assignment
+    board_profile_status: candidate_not_verified
+    no_load_observation: measured_3v3_high_on_2026_07_02
+    loaded_behavior: unknown
+    electrical_compatibility: requires_3v3_to_1v8_level_shifter_before_hq_xvs
+    active_klipper_output: hq_xvs_sync
+    active_klipper_macros:
+      - HQ_XVS_HIGH
+      - HQ_XVS_LOW
+      - HQ_XVS_PULSE
+      - HQ_XVS_TEST_TRAIN
+    evidence_refs:
+      - electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md
+      - evidence/rev-a5-evidence-status.example.json
+      - docs/controller-discovery/controller-discovery-status.md
+  led_gate_green:
+    pin: PA9
+    connector_label: WiFi TXD1
+    signal: GREEN LED gate
+    channel: AF_GREEN
+    polarity: positive
+    evidence_status: documented_assignment
+    board_profile_status: candidate_not_verified
+    no_load_observation: documented_prior_test
+    loaded_behavior: unknown
+    evidence_refs:
+      - electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md
+      - evidence/rev-a5-evidence-status.example.json
+      - docs/controller-discovery/controller-discovery-status.md
+  led_gate_red:
+    pin: PA10
+    connector_label: WiFi RXD1
+    signal: RED LED gate
+    channel: AF_RED
+    polarity: positive
+    evidence_status: documented_assignment
+    board_profile_status: candidate_not_verified
+    no_load_observation: documented_prior_test
+    loaded_behavior: unknown
+    evidence_refs:
+      - electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md
+      - evidence/rev-a5-evidence-status.example.json
+      - docs/controller-discovery/controller-discovery-status.md
+  led_gate_white:
+    pin: PB13
+    connector_label: TC1 SCK
+    signal: WHITE LED gate
+    channel: WHITE_BF
+    polarity: positive
+    evidence_status: documented_assignment
+    board_profile_status: candidate_not_verified
+    no_load_observation: documented_prior_test
+    loaded_behavior: unknown
+    evidence_refs:
+      - electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md
+      - evidence/rev-a5-evidence-status.example.json
+      - docs/controller-discovery/controller-discovery-status.md
+
+unknowns:
+  endstop_pins: unknown
+  safe_gpio_voltage_levels: unknown
+  reset_default_states: unknown
+  output_drive_strength: unknown
+  protection_or_level_shifting: unknown
+  rail_budgets: unknown
+  camera_trigger_polarity_at_camera: unknown
+  led_driver_input_polarity_under_load: unknown
+  led_current_limits: unknown
+
+restrictions:
+  real_hardware_step_pulses: prohibited_until_pinmap_verified
+  motor_driver_enable: prohibited_until_pinmap_verified
+  led_outputs: prohibited_until_pinmap_verified
+  camera_connection: prohibited_until_pinmap_verified
+  approved_use: simulator_only

@@ -1,0 +1,859 @@
+{
+  "schema_version": "evidence-status/v1",
+  "document_id": "controller-board-discovery-evidence-status",
+  "description": "Offline evidence-status snapshot for MKS controller board discovery and board-profile state. This file is documentation/data only and does not approve firmware flashing, GPIO toggling, motor motion, homing, LED driving, camera triggering, serial control, network control, probing, or other live hardware action.",
+  "required_unknowns": [
+    "controller_identity.exact_mks_kingroon_variant_relationship",
+    "controller_identity.exact_mcu_part",
+    "firmware_path.flash_debug_method",
+    "pin_mapping.motion.x_axis",
+    "pin_mapping.motion.y_axis",
+    "pin_mapping.motion.z_axis",
+    "pin_mapping.endstop_inputs",
+    "rail_limit.controller_power_rails",
+    "rail_limit.motor_supply_current_budget",
+    "rail_limit.led_supply_current_budget",
+    "output_state.controller_boot_reset",
+    "output_state.candidate_outputs_at_boot",
+    "led_load_behavior.af_red",
+    "led_load_behavior.af_green",
+    "led_load_behavior.white_bf",
+    "camera_trigger_behavior.electrical_compatibility",
+    "approval.pinmap_verification",
+    "approval.no_motion_electrical_live_test",
+    "approval.motion_or_homing_live_test",
+    "approval.led_live_test",
+    "approval.camera_trigger_live_test"
+  ],
+  "unknown_blocker_summary": {
+    "scope": "mks_controller_board_discovery_and_pinmap_state",
+    "summary_status": "blocked_by_unknowns",
+    "unknown_entry_ids": [
+      "controller_identity.exact_mks_kingroon_variant_relationship",
+      "controller_identity.exact_mcu_part",
+      "firmware_path.flash_debug_method",
+      "pin_mapping.motion.x_axis",
+      "pin_mapping.motion.y_axis",
+      "pin_mapping.motion.z_axis",
+      "pin_mapping.endstop_inputs",
+      "rail_limit.controller_power_rails",
+      "rail_limit.motor_supply_current_budget",
+      "rail_limit.led_supply_current_budget",
+      "output_state.controller_boot_reset",
+      "output_state.candidate_outputs_at_boot",
+      "led_load_behavior.af_red",
+      "led_load_behavior.af_green",
+      "led_load_behavior.white_bf",
+      "camera_trigger_behavior.electrical_compatibility",
+      "approval.pinmap_verification",
+      "approval.no_motion_electrical_live_test",
+      "approval.motion_or_homing_live_test",
+      "approval.led_live_test",
+      "approval.camera_trigger_live_test"
+    ],
+    "blockers": [
+      {
+        "id": "pinmap_verified_state_blocked",
+        "title": "Board profile cannot move past pinmap_candidate",
+        "blocked_by": [
+          "controller_identity.exact_mks_kingroon_variant_relationship",
+          "controller_identity.exact_mcu_part",
+          "firmware_path.flash_debug_method",
+          "pin_mapping.motion.x_axis",
+          "pin_mapping.motion.y_axis",
+          "pin_mapping.motion.z_axis",
+          "pin_mapping.endstop_inputs",
+          "rail_limit.controller_power_rails",
+          "output_state.controller_boot_reset",
+          "output_state.candidate_outputs_at_boot",
+          "approval.pinmap_verification"
+        ],
+        "blocks": [
+          "board_profile_pinmap_verified",
+          "firmware_profile_hardware_tested",
+          "live_controller_output_authority",
+          "camera_or_led_connection",
+          "motion_or_homing_test"
+        ],
+        "resolution_evidence_required": "Record exact controller identity, MCU part, flash/debug path, motion/endstop mappings, rail and boot/default-state evidence, and reviewed pinmap verification approval before the profile can move past pinmap_candidate.",
+        "evidence_fields_required": [
+          "exact MKS/Kingroon board relationship and board revision evidence",
+          "exact MCU part marking or firmware-target evidence",
+          "reviewed flash/debug and rollback method",
+          "X/Y/Z step, direction, enable, and endstop mapping evidence",
+          "controller rail voltage/current budget evidence",
+          "boot/reset/default state evidence for controller and candidate outputs",
+          "reviewed approval for pinmap verification"
+        ]
+      },
+      {
+        "id": "live_output_tests_blocked",
+        "title": "Live output tests are not evidence-backed",
+        "blocked_by": [
+          "led_load_behavior.af_red",
+          "led_load_behavior.af_green",
+          "led_load_behavior.white_bf",
+          "camera_trigger_behavior.electrical_compatibility",
+          "rail_limit.led_supply_current_budget",
+          "output_state.candidate_outputs_at_boot",
+          "approval.led_live_test",
+          "approval.camera_trigger_live_test"
+        ],
+        "blocks": [
+          "actual_led_connection",
+          "nonzero_led_current_setpoint",
+          "camera_trigger_connection",
+          "camera_trigger_output",
+          "gpio_toggle_live_test"
+        ],
+        "resolution_evidence_required": "Record loaded LED behavior, LED rail/current budget, candidate output boot/default states, camera trigger electrical compatibility, and separate reviewed approvals before live LED or camera-trigger tests.",
+        "evidence_fields_required": [
+          "loaded behavior evidence for red, green, and white channels",
+          "LED supply rail voltage and current budget",
+          "candidate output boot/reset/default states",
+          "camera trigger voltage, polarity, pulse-width, protection, and default-state evidence",
+          "dummy-load or high-impedance test plan",
+          "explicit approvals for LED and camera-trigger live tests"
+        ]
+      }
+    ]
+  },
+  "live_action_gates": [
+    {
+      "id": "controller_no_motion_electrical_gate",
+      "title": "Controller no-motion electrical live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "controller_identity.exact_mks_kingroon_variant_relationship",
+        "controller_identity.exact_mcu_part",
+        "firmware_path.flash_debug_method",
+        "rail_limit.controller_power_rails",
+        "output_state.controller_boot_reset",
+        "approval.no_motion_electrical_live_test"
+      ],
+      "prohibited_actions": [
+        "firmware flashing",
+        "GPIO toggling",
+        "serial or network live-controller control",
+        "motor driver enable",
+        "motor motion",
+        "LED driving",
+        "camera triggering"
+      ],
+      "evidence_fields_required": [
+        "exact target controller and MCU evidence",
+        "reviewed flash/debug and rollback method",
+        "controller rail voltage/current budget",
+        "boot/reset/default state evidence",
+        "test point and measurement-equipment plan",
+        "common-reference or isolation plan",
+        "explicit no-motion-only reviewer approval"
+      ]
+    },
+    {
+      "id": "controller_motion_homing_gate",
+      "title": "Motion and homing live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "pin_mapping.motion.x_axis",
+        "pin_mapping.motion.y_axis",
+        "pin_mapping.motion.z_axis",
+        "pin_mapping.endstop_inputs",
+        "rail_limit.motor_supply_current_budget",
+        "approval.motion_or_homing_live_test"
+      ],
+      "prohibited_actions": [
+        "motor driver enable",
+        "step pulse generation",
+        "axis motion",
+        "homing",
+        "hard-stop approach",
+        "Z motion without separate collision review"
+      ],
+      "evidence_fields_required": [
+        "verified step, direction, enable, and endstop mappings",
+        "motor driver current limit and thermal margin",
+        "safe one-axis reduced-current reduced-speed plan",
+        "emergency stop or power-off path",
+        "Z slide/objective collision review",
+        "explicit reviewer approval naming the selected axis"
+      ]
+    },
+    {
+      "id": "controller_v1_manual_centered_bounded_test_gate",
+      "title": "V1 manual-centered bounded X/Y and Z-focus test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "pin_mapping.motion.x_axis",
+        "pin_mapping.motion.y_axis",
+        "rail_limit.motor_supply_current_budget",
+        "approval.motion_or_homing_live_test"
+      ],
+      "prohibited_actions": [
+        "homing",
+        "hard-stop approach",
+        "travel outside +/-10 mm from manual X/Y center",
+        "Z motion outside approved focus-search range",
+        "camera trigger output outside approved camera-trigger scope",
+        "LED output outside approved lighting scope"
+      ],
+      "evidence_fields_required": [
+        "manual center setup record",
+        "X/Y step, direction, and enable mapping for the current scanner",
+        "X/Y +/-10 mm soft envelope from manual center",
+        "initial X/Y speed 0.5-1 mm/s and acceleration 5-10 mm/s^2 or stricter limits",
+        "Z focus-search range and collision review when Z is in scope",
+        "homing commands disabled and prohibited",
+        "Fluidd emergency stop and physical power removal stop path",
+        "explicit reviewer approval naming V1 manual-centered bounded test"
+      ]
+    }
+  ],
+  "procedure_proposals": [
+    {
+      "id": "stage0_read_only_inspection_proposal",
+      "title": "Stage 0 read-only inspection proposal",
+      "stage": "stage_0",
+      "proposal_status": "proposal_pending_approval",
+      "approved": false,
+      "executed": false,
+      "hardware_access": "software_only",
+      "output_mode": "none",
+      "scope": "Review checked-in controller discovery docs, evidence entries, blockers, and required fields without accessing live hardware.",
+      "depends_on": [],
+      "allowed_actions": [
+        "read checked-in scanner-hardware docs and evidence files",
+        "record explicit unknowns, blockers, and required evidence fields",
+        "run offline validators against checked-in files"
+      ],
+      "prohibited_actions": [
+        "firmware flashing",
+        "GPIO toggling",
+        "serial or network live-controller control",
+        "motor driver enable",
+        "motor motion or homing",
+        "LED driving",
+        "camera trigger connection or output"
+      ],
+      "approval_required": "Human approval must name Stage 0, the exact repository evidence scope, the reviewer, date, and allowed read-only actions before this proposal may be executed.",
+      "evidence_refs": [],
+      "evidence_fields_required": [
+        "human approval record for Stage 0 read-only scope",
+        "reviewer identity and review date",
+        "evidence refs reviewed",
+        "explicit list of unknowns preserved",
+        "validator command and result"
+      ]
+    },
+    {
+      "id": "stage1_dummy_no_load_preflight_proposal",
+      "title": "Stage 1 dummy/no-load preflight proposal",
+      "stage": "stage_1",
+      "proposal_status": "proposal_pending_approval",
+      "approved": false,
+      "executed": false,
+      "hardware_access": "software_only",
+      "output_mode": "none",
+      "scope": "Prepare a no-output checklist for a future dummy-load or no-load measurement plan while keeping all live output gates closed.",
+      "depends_on": [
+        "stage0_read_only_inspection_proposal"
+      ],
+      "allowed_actions": [
+        "draft required evidence fields for a future no-load or dummy-load plan",
+        "identify unresolved unknowns that block any live output test",
+        "review checked-in docs for missing approval, measurement, and stop-condition fields",
+        "run offline validators against checked-in files"
+      ],
+      "prohibited_actions": [
+        "firmware flashing",
+        "GPIO toggling or output commands",
+        "serial or network live-controller control",
+        "test fixture or dummy-load connection",
+        "motor driver enable, motion, or homing",
+        "actual LED connection or nonzero LED current setpoint",
+        "camera trigger connection or output"
+      ],
+      "approval_required": "Human approval must name Stage 1 dummy/no-load preflight, the exact docs-only scope, the reviewer, date, and the fact that no output or live hardware access is allowed.",
+      "evidence_refs": [],
+      "evidence_fields_required": [
+        "human approval record for Stage 1 no-output preflight scope",
+        "reviewer identity and review date",
+        "target signal or subsystem list if any",
+        "required no-load or dummy-load measurement fields",
+        "explicit stop conditions",
+        "validator command and result"
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "id": "controller_identity.board_profile_state",
+      "category": "controller_identity",
+      "subject": "Current scanner MKS board profile state",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pcb_code": "M-M-B-A-00526",
+        "scope": "current scanner MKS/Kingroon context only",
+        "profile_state": "pinmap_candidate",
+        "hardware_approval": false,
+        "simulator_only_until": "pinmap_verified",
+        "homing_configured": false,
+        "limit_switches_connected": false,
+        "homing_enable_gate": "disabled_until_pinmap_verified_and_homing_evidence_reviewed",
+        "future_boundary_detection": "pico_or_driver_based_possible_not_proven"
+      },
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "boards/mks-robin-mini-v2-scanner/board.md",
+        "mechanics/homing/README.md",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ]
+    },
+    {
+      "id": "controller_identity.mcu_family",
+      "category": "controller_identity",
+      "subject": "Current MKS MCU family evidence",
+      "status": "known",
+      "value": {
+        "family": "STM32F103-family",
+        "source": "current Klipper deployment evidence"
+      },
+      "evidence_refs": [
+        "docs/controller-discovery/controller-discovery-status.md",
+        "boards/mks-robin-mini-v2-scanner/pins.yaml"
+      ]
+    },
+    {
+      "id": "driver_capability.mks_a4988_sensorless",
+      "category": "driver_capability",
+      "subject": "Current MKS/A4988 sensorless homing capability",
+      "status": "known",
+      "value": {
+        "driver_type": "A4988",
+        "sensorless_feedback": "none_documented",
+        "homing_capability": "not_supported_by_current_evidence"
+      },
+      "evidence_refs": [
+        "docs/controller-discovery/controller-discovery-status.md",
+        "mechanics/homing/README.md",
+        "mechanics/homing/pico-sensorless-homing-feasibility.md"
+      ]
+    },
+    {
+      "id": "pin_mapping.mks.pd6.camera_trigger",
+      "category": "pin_mapping",
+      "subject": "PD6 candidate camera/sync trigger assignment",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pin": "PD6",
+        "connector_label": "E0_STEP",
+        "signal": "camera/sync trigger",
+        "channel": "CAMERA_TRIGGER",
+        "board_profile_status": "candidate_not_verified"
+      },
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ]
+    },
+    {
+      "id": "pin_mapping.mks.pa9.green_gate",
+      "category": "pin_mapping",
+      "subject": "PA9 candidate green LED gate assignment",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pin": "PA9",
+        "connector_label": "WiFi TXD1",
+        "signal": "GREEN LED gate",
+        "channel": "AF_GREEN",
+        "polarity": "positive",
+        "board_profile_status": "candidate_not_verified"
+      },
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ]
+    },
+    {
+      "id": "pin_mapping.mks.pa10.red_gate",
+      "category": "pin_mapping",
+      "subject": "PA10 candidate red LED gate assignment",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pin": "PA10",
+        "connector_label": "WiFi RXD1",
+        "signal": "RED LED gate",
+        "channel": "AF_RED",
+        "polarity": "positive",
+        "board_profile_status": "candidate_not_verified"
+      },
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ]
+    },
+    {
+      "id": "pin_mapping.mks.pb13.white_gate",
+      "category": "pin_mapping",
+      "subject": "PB13 candidate white LED gate assignment",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pin": "PB13",
+        "connector_label": "TC1 SCK",
+        "signal": "WHITE LED gate",
+        "channel": "WHITE_BF",
+        "polarity": "positive",
+        "board_profile_status": "candidate_not_verified"
+      },
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ]
+    },
+    {
+      "id": "controller_identity.exact_mks_kingroon_variant_relationship",
+      "category": "controller_identity",
+      "subject": "Exact MKS/Kingroon board variant relationship",
+      "status": "unknown",
+      "unknown_reason": "The checked-in evidence identifies the MKS Robin Mini V2.0 scanner controller context but does not fully resolve the Kingroon machine/controller variant relationship.",
+      "evidence_refs": [
+        "docs/controller-discovery/controller-discovery-status.md"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "exact marketed machine/controller variant",
+        "board revision evidence",
+        "source photograph or manufacturer documentation",
+        "reviewed relationship between Kingroon scanner context and MKS board profile"
+      ]
+    },
+    {
+      "id": "controller_identity.exact_mcu_part",
+      "category": "controller_identity",
+      "subject": "Exact MCU part marking",
+      "status": "unknown",
+      "unknown_reason": "Only STM32F103-family evidence is recorded; the exact MCU part marking is not checked into evidence.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "readable MCU marking or accepted firmware-target evidence",
+        "clock/source evidence",
+        "reviewed match to firmware target"
+      ]
+    },
+    {
+      "id": "firmware_path.flash_debug_method",
+      "category": "firmware_path",
+      "subject": "MKS flash/debug method and rollback",
+      "status": "unknown",
+      "unknown_reason": "No reviewed flash/debug method or rollback method is recorded for the exact target board.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "bootloader or debug interface",
+        "flash command or UI path",
+        "rollback or recovery method",
+        "no-motion verification step",
+        "review approval"
+      ]
+    },
+    {
+      "id": "pin_mapping.motion.x_axis",
+      "category": "pin_mapping",
+      "subject": "X axis step/dir/enable/endstop mapping",
+      "status": "unknown",
+      "unknown_reason": "The hardware evidence profile intentionally keeps motion pins unknown until reviewed voltage, connector and boot/default-state evidence exists.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "step pin",
+        "direction pin",
+        "enable pin",
+        "endstop or homing input",
+        "connector mapping",
+        "polarity",
+        "voltage level",
+        "boot/reset state"
+      ]
+    },
+    {
+      "id": "pin_mapping.motion.y_axis",
+      "category": "pin_mapping",
+      "subject": "Y axis step/dir/enable/endstop mapping",
+      "status": "unknown",
+      "unknown_reason": "The hardware evidence profile intentionally keeps motion pins unknown until reviewed voltage, connector and boot/default-state evidence exists.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "step pin",
+        "direction pin",
+        "enable pin",
+        "endstop or homing input",
+        "connector mapping",
+        "polarity",
+        "voltage level",
+        "boot/reset state"
+      ]
+    },
+    {
+      "id": "pin_mapping.motion.z_axis",
+      "category": "pin_mapping",
+      "subject": "Z axis step/dir/enable/endstop mapping",
+      "status": "unknown",
+      "unknown_reason": "The hardware evidence profile intentionally keeps motion pins unknown until reviewed voltage, connector, boot/default-state and Z collision evidence exists.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "step pin",
+        "direction pin",
+        "enable pin",
+        "endstop or homing input",
+        "connector mapping",
+        "polarity",
+        "voltage level",
+        "boot/reset state",
+        "Z slide/objective collision review"
+      ]
+    },
+    {
+      "id": "pin_mapping.endstop_inputs",
+      "category": "endstop_input",
+      "subject": "X/Y/Z endstop or homing inputs",
+      "status": "unknown",
+      "unknown_reason": "No reviewed evidence establishes working endstop/homing input mapping, polarity, voltage tolerance, or repeatability on the current MKS setup.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/homing-readiness-evidence.md"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "input pin and connector per axis",
+        "pull-up or pull-down behavior",
+        "voltage tolerance",
+        "inactive and active electrical state",
+        "actuation method",
+        "repeatability plan"
+      ]
+    },
+    {
+      "id": "rail_limit.controller_power_rails",
+      "category": "rail_limit",
+      "subject": "Controller power rail voltage and available current",
+      "status": "unknown",
+      "unknown_reason": "Controller rail voltage/current budgets and safe available current for external loads are not recorded as reviewed evidence.",
+      "evidence_refs": [
+        "docs/controller-discovery/controller-discovery-status.md"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "rail names",
+        "nominal voltage",
+        "measured voltage",
+        "available current budget",
+        "overcurrent protection",
+        "allowed external loads"
+      ]
+    },
+    {
+      "id": "rail_limit.motor_supply_current_budget",
+      "category": "rail_limit",
+      "subject": "Motor supply current budget and driver thermal margin",
+      "status": "unknown",
+      "unknown_reason": "Motor supply current budget, driver Vref/current-limit settings, and thermal margins are not recorded as reviewed evidence.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml"
+      ],
+      "blocks": [
+        "controller_motion_homing_gate"
+      ],
+      "evidence_fields_required": [
+        "motor supply voltage",
+        "driver current-limit or Vref method",
+        "per-axis current setting",
+        "thermal margin",
+        "reduced-current test limit"
+      ]
+    },
+    {
+      "id": "rail_limit.led_supply_current_budget",
+      "category": "rail_limit",
+      "subject": "LED supply voltage and current budget",
+      "status": "unknown",
+      "unknown_reason": "The LED supply rail, voltage, current budget, and protection path are not recorded as reviewed evidence.",
+      "evidence_refs": [
+        "electronics/led-driver/requirements.md"
+      ],
+      "blocks": [
+        "live_output_tests_blocked"
+      ],
+      "evidence_fields_required": [
+        "LED supply source",
+        "measured voltage",
+        "available current budget",
+        "current-limit method",
+        "overcurrent protection",
+        "thermal limit"
+      ]
+    },
+    {
+      "id": "output_state.controller_boot_reset",
+      "category": "output_state",
+      "subject": "Controller boot/reset/default output states",
+      "status": "unknown",
+      "unknown_reason": "Boot/reset/default states for the controller and driver enables are not recorded as reviewed evidence.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "power-on state",
+        "reset state",
+        "firmware-start state",
+        "driver enable state",
+        "candidate trigger and LED gate states"
+      ]
+    },
+    {
+      "id": "output_state.candidate_outputs_at_boot",
+      "category": "output_state",
+      "subject": "Candidate trigger and LED gate boot/default states",
+      "status": "unknown",
+      "unknown_reason": "PD6, PA9, PA10 and PB13 boot/reset/default states are not recorded under reviewed no-motion evidence.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked",
+        "live_output_tests_blocked"
+      ],
+      "evidence_fields_required": [
+        "PD6 boot/reset/default state",
+        "PA9 boot/reset/default state",
+        "PA10 boot/reset/default state",
+        "PB13 boot/reset/default state",
+        "measurement equipment and reference plan"
+      ]
+    },
+    {
+      "id": "led_load_behavior.af_red",
+      "category": "led_load_behavior",
+      "subject": "AF_RED loaded LED behavior",
+      "status": "unknown",
+      "unknown_reason": "No loaded behavior evidence is recorded for the red LED gate, current limiter, LED driver or actual LED.",
+      "evidence_refs": [
+        "electronics/led-driver/requirements.md"
+      ],
+      "blocks": [
+        "live_output_tests_blocked"
+      ],
+      "evidence_fields_required": [
+        "driver input behavior",
+        "dummy-load result",
+        "current-sense voltage",
+        "safe current limit",
+        "thermal observation"
+      ]
+    },
+    {
+      "id": "led_load_behavior.af_green",
+      "category": "led_load_behavior",
+      "subject": "AF_GREEN loaded LED behavior",
+      "status": "unknown",
+      "unknown_reason": "No loaded behavior evidence is recorded for the green LED gate, current limiter, LED driver or actual LED.",
+      "evidence_refs": [
+        "electronics/led-driver/requirements.md"
+      ],
+      "blocks": [
+        "live_output_tests_blocked"
+      ],
+      "evidence_fields_required": [
+        "driver input behavior",
+        "dummy-load result",
+        "current-sense voltage",
+        "safe current limit",
+        "thermal observation"
+      ]
+    },
+    {
+      "id": "led_load_behavior.white_bf",
+      "category": "led_load_behavior",
+      "subject": "WHITE_BF loaded LED behavior",
+      "status": "unknown",
+      "unknown_reason": "No loaded behavior evidence is recorded for the white LED gate, current limiter, LED driver or actual LED.",
+      "evidence_refs": [
+        "electronics/led-driver/requirements.md"
+      ],
+      "blocks": [
+        "live_output_tests_blocked"
+      ],
+      "evidence_fields_required": [
+        "driver input behavior",
+        "dummy-load result",
+        "current-sense voltage",
+        "safe current limit",
+        "thermal observation"
+      ]
+    },
+    {
+      "id": "camera_trigger_behavior.electrical_compatibility",
+      "category": "camera_trigger_behavior",
+      "subject": "Camera trigger electrical compatibility",
+      "status": "unknown",
+      "unknown_reason": "Camera trigger voltage requirement, polarity, pulse-width, protection, and boot/default behavior are not recorded as reviewed evidence.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md"
+      ],
+      "blocks": [
+        "live_output_tests_blocked"
+      ],
+      "evidence_fields_required": [
+        "camera trigger input voltage requirement",
+        "polarity",
+        "pulse-width requirement",
+        "protection or level-shifting circuit",
+        "boot/reset/default state"
+      ]
+    },
+    {
+      "id": "approval.pinmap_verification",
+      "category": "approval",
+      "subject": "Board pinmap verification approval",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval raises the current board profile from pinmap_candidate to pinmap_verified.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/board.md"
+      ],
+      "blocks": [
+        "pinmap_verified_state_blocked"
+      ],
+      "evidence_fields_required": [
+        "reviewer",
+        "date",
+        "exact scope",
+        "evidence refs",
+        "explicit state transition approval"
+      ]
+    },
+    {
+      "id": "approval.no_motion_electrical_live_test",
+      "category": "approval",
+      "subject": "Approval for no-motion electrical live test",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval permits a no-motion electrical live test.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "evidence_fields_required": [
+        "reviewer",
+        "date",
+        "allowed live action",
+        "prohibited actions",
+        "stop conditions"
+      ]
+    },
+    {
+      "id": "approval.motion_or_homing_live_test",
+      "category": "approval",
+      "subject": "Approval for motion or homing live test",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval permits motor enable, axis motion, homing or hard-stop approach.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "controller_motion_homing_gate"
+      ],
+      "evidence_fields_required": [
+        "reviewer",
+        "date",
+        "selected axis",
+        "speed/current/travel limits",
+        "emergency stop path",
+        "Z collision review if applicable"
+      ]
+    },
+    {
+      "id": "approval.led_live_test",
+      "category": "approval",
+      "subject": "Approval for LED live test",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval permits actual LED connection or nonzero LED current setpoint.",
+      "evidence_refs": [
+        "electronics/led-driver/requirements.md"
+      ],
+      "blocks": [
+        "live_output_tests_blocked"
+      ],
+      "evidence_fields_required": [
+        "reviewer",
+        "date",
+        "allowed channel",
+        "current limit",
+        "duration",
+        "temperature observation",
+        "stop conditions"
+      ]
+    },
+    {
+      "id": "approval.camera_trigger_live_test",
+      "category": "approval",
+      "subject": "Approval for camera trigger live test",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval permits connecting or driving a camera trigger input.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md"
+      ],
+      "blocks": [
+        "live_output_tests_blocked"
+      ],
+      "evidence_fields_required": [
+        "reviewer",
+        "date",
+        "camera trigger input spec",
+        "dummy-signal plan",
+        "pulse-width limit",
+        "stop conditions"
+      ]
+    }
+  ]
+}

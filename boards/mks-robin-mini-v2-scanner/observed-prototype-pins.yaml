@@ -1,0 +1,53 @@
+schema: fast_ofm_observed_machine_configuration/v1
+profile:
+  id: fast-ofm-prototype-2026-09-09
+  board_name: MKS Robin Mini V2.0
+  mcu_family: STM32F103-family
+  evidence_date: "2026-09-09"
+  evidence_type: observed_live_software_configuration
+  scope: one_fast_ofm_prototype_only
+  generic_board_profile: false
+  electrical_approval: false
+  clinically_validated: false
+
+motion:
+  coordinate_source: commanded_stepper_position_no_encoder
+  homing_verified: false
+  local_reference: operator_confirmed_for_each_session
+  axes:
+    x:
+      step_pin: PE3
+      direction_pin: PE2
+      enable_pin: "!PE4"
+      endstop_input: "!PA15"
+      rotation_distance_mm: 2
+      microsteps: 16
+    y:
+      step_pin: PE0
+      direction_pin: PB9
+      enable_pin: "!PE1"
+      endstop_input: "!PA12"
+      rotation_distance_mm: 2
+      microsteps: 16
+    z:
+      step_pin: PB5
+      direction_pin: "!PB4"
+      enable_pin: "!PB8"
+      endstop_input: "!PA11"
+      rotation_distance_mm: 1.0
+      microsteps: 16
+
+illumination_gates:
+  green: {pin: PA9, polarity: positive}
+  red: {pin: PA10, polarity: positive}
+  white: {pin: PB14, polarity: positive}
+
+known_limitations:
+  - This records a deployed software configuration, not a generic MKS board pinout.
+  - Endstop inputs were present in configuration but physical homing was not verified.
+  - Stepper current limits, Vref and thermal margin were not captured for release.
+  - GPIO loaded behavior, protection and reset defaults require independent verification.
+  - Obsolete installed macros referring to led_white_tc1 must not be executed.
+
+evidence_refs:
+  - ../../evidence/prototype-checkpoint-2026-09-09.md

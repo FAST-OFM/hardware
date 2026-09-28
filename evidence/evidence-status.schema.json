@@ -1,0 +1,496 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fast-ofm.example/schema/evidence-status/v1",
+  "title": "Scanner hardware evidence status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_id",
+    "description",
+    "required_unknowns",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "evidence-status/v1"
+    },
+    "document_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_unknowns": {
+      "description": "Entry IDs that must remain explicit unknowns in this document until evidence is added and the ID is removed from this list.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+      },
+      "uniqueItems": true
+    },
+    "unknown_blocker_summary": {
+      "$ref": "#/$defs/unknown_blocker_summary"
+    },
+    "live_action_gates": {
+      "description": "Offline gates that prohibit live hardware action until referenced unknowns are resolved and required evidence fields are recorded.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/live_action_gate"
+      }
+    },
+    "procedure_proposals": {
+      "description": "Software-only, no-output procedure proposals. These records do not approve or execute live hardware action.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/procedure_proposal"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "subject",
+        "status",
+        "evidence_refs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+        },
+        "category": {
+          "enum": [
+            "led_current_limit",
+            "test_prerequisite",
+            "rail_limit",
+            "pin_mapping",
+            "output_type",
+            "output_state",
+            "controller_identity",
+            "driver_capability",
+            "endstop_input",
+            "firmware_path",
+            "homing_capability",
+            "sensorless_feasibility",
+            "led_load_behavior",
+            "camera_trigger_behavior",
+            "encoder_part",
+            "encoder_mechanical_mount",
+            "encoder_signal_interface",
+            "encoder_calibration",
+            "approval"
+          ]
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "known",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "value": {
+          "type": [
+            "object",
+            "array",
+            "string",
+            "number",
+            "integer",
+            "boolean"
+          ]
+        },
+        "unknown_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "evidence_fields_required": {
+          "description": "Concrete fields that must be captured before this entry can move from unknown to known.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "value"
+            ],
+            "not": {
+              "required": [
+                "unknown_reason"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unknown"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "unknown_reason"
+            ],
+            "not": {
+              "required": [
+                "value"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "not_applicable"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "rationale"
+            ],
+            "not": {
+              "required": [
+                "value"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "unknown_blocker_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "summary_status",
+        "unknown_entry_ids",
+        "blockers"
+      ],
+      "properties": {
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary_status": {
+          "enum": [
+            "blocked_by_unknowns",
+            "ready",
+            "not_applicable"
+          ]
+        },
+        "unknown_entry_ids": {
+          "description": "Entry IDs summarized as explicit unknowns. The validator requires each ID to exist and remain status unknown.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+          },
+          "uniqueItems": true
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/blocker"
+          }
+        }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "blocked_by",
+        "blocks",
+        "resolution_evidence_required"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blocked_by": {
+          "description": "Unknown entry IDs that create this blocker.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "blocks": {
+          "description": "Capabilities or decisions blocked until the referenced unknowns are resolved by evidence.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "resolution_evidence_required": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_fields_required": {
+          "description": "Concrete fields that must be captured before the blocked capability can be reconsidered.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "live_action_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "status",
+        "approved",
+        "executed",
+        "blocked_by",
+        "prohibited_actions",
+        "evidence_fields_required"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "prohibited_by_unknowns",
+            "pending_review",
+            "not_applicable"
+          ]
+        },
+        "approved": {
+          "description": "Whether this live hardware test gate has explicit reviewer approval for the exact scope.",
+          "type": "boolean"
+        },
+        "executed": {
+          "description": "Whether this live hardware test gate has been executed and recorded for the exact approved scope.",
+          "type": "boolean"
+        },
+        "blocked_by": {
+          "description": "Unknown entry IDs that keep this live action prohibited.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "prohibited_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "evidence_fields_required": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      }
+    },
+    "procedure_proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "stage",
+        "proposal_status",
+        "approved",
+        "executed",
+        "hardware_access",
+        "output_mode",
+        "scope",
+        "depends_on",
+        "allowed_actions",
+        "prohibited_actions",
+        "approval_required",
+        "evidence_refs",
+        "evidence_fields_required"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stage": {
+          "enum": [
+            "stage_0",
+            "stage_1"
+          ]
+        },
+        "proposal_status": {
+          "enum": [
+            "proposal_pending_approval",
+            "approved_pending_execution",
+            "executed",
+            "rejected"
+          ]
+        },
+        "approved": {
+          "description": "Whether this software-only procedure proposal has explicit human approval for the exact scope.",
+          "type": "boolean"
+        },
+        "executed": {
+          "description": "Whether this software-only procedure proposal has been executed and recorded for the exact approved scope.",
+          "type": "boolean"
+        },
+        "hardware_access": {
+          "description": "Current proposals are limited to software-only review and must not access live hardware.",
+          "const": "software_only"
+        },
+        "output_mode": {
+          "description": "Current proposals must not emit GPIO, trigger, LED, motion, serial, network, flashing, or other hardware output.",
+          "const": "none"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+          },
+          "uniqueItems": true
+        },
+        "allowed_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "prohibited_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "approval_required": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "description": "Approval/execution evidence refs. Pending proposals must keep this empty until human approval exists.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "evidence_fields_required": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      }
+    }
+  }
+}

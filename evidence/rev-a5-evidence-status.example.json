@@ -1,0 +1,686 @@
+{
+  "schema_version": "evidence-status/v1",
+  "document_id": "rev-a5-led-trigger-evidence-status",
+  "description": "Offline evidence-status snapshot for Rev A5 LED gate, camera trigger, current-limit, rail-limit, output-state, and approval facts. This file is documentation/data only and is not a hardware test procedure.",
+  "required_unknowns": [
+    "led_current_limit.af_red",
+    "led_current_limit.af_green",
+    "led_current_limit.white_bf",
+    "rail_limit.led_supply_voltage",
+    "rail_limit.led_supply_current_budget",
+    "rail_limit.controller_board_led_rail",
+    "pin_mapping.driver.af_red_led_connector",
+    "pin_mapping.driver.af_green_led_connector",
+    "pin_mapping.driver.white_bf_led_connector",
+    "output_type.camera_trigger",
+    "output_type.af_red_led_gate",
+    "output_type.af_green_led_gate",
+    "output_type.white_bf_led_gate",
+    "output_state.mks_led_gates_at_boot",
+    "output_state.camera_trigger_at_boot",
+    "output_state.arduino_pwm_at_boot_reset",
+    "output_state.led_driver_fault_default",
+    "camera_trigger_behavior.electrical_compatibility",
+    "camera_trigger_behavior.boot_reset_state",
+    "test_prerequisite.dummy_load_led_driver",
+    "test_prerequisite.low_current_led_test",
+    "approval.actual_led_connection",
+    "approval.camera_trigger_connection",
+    "approval.nonzero_led_current_setpoint",
+    "approval.common_reference_or_isolation_plan"
+  ],
+  "live_action_gates": [
+    {
+      "id": "trigger_led_no_guess_gate",
+      "title": "Trigger and LED no-guess gate",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "led_current_limit.af_red",
+        "led_current_limit.af_green",
+        "led_current_limit.white_bf",
+        "rail_limit.led_supply_voltage",
+        "rail_limit.led_supply_current_budget",
+        "rail_limit.controller_board_led_rail",
+        "pin_mapping.driver.af_red_led_connector",
+        "pin_mapping.driver.af_green_led_connector",
+        "pin_mapping.driver.white_bf_led_connector",
+        "output_type.camera_trigger",
+        "output_type.af_red_led_gate",
+        "output_type.af_green_led_gate",
+        "output_type.white_bf_led_gate",
+        "output_state.mks_led_gates_at_boot",
+        "output_state.camera_trigger_at_boot",
+        "output_state.arduino_pwm_at_boot_reset",
+        "output_state.led_driver_fault_default",
+        "camera_trigger_behavior.electrical_compatibility",
+        "camera_trigger_behavior.boot_reset_state",
+        "test_prerequisite.dummy_load_led_driver",
+        "test_prerequisite.low_current_led_test",
+        "approval.actual_led_connection",
+        "approval.camera_trigger_connection",
+        "approval.nonzero_led_current_setpoint",
+        "approval.common_reference_or_isolation_plan"
+      ],
+      "prohibited_actions": [
+        "guessing controller pins, rails, LED part numbers, current limits, output types, or output states",
+        "connecting actual white, red, or green LEDs",
+        "requesting nonzero LED current setpoints",
+        "connecting a camera trigger input",
+        "driving camera trigger output",
+        "using controller-board rails for LED power",
+        "skipping dummy-load or high-impedance LED-driver tests",
+        "skipping first low-current LED test prerequisites"
+      ],
+      "evidence_fields_required": [
+        "camera trigger voltage requirement, polarity, pulse-width requirement, output type, protection or level shifting, boot/reset state, dummy-signal plan, and oscilloscope test point",
+        "white, red, and green LED installed part or measured safe-current evidence, forward voltage, thermal path, current limit, driver output connector mapping, output type, polarity, boot/reset state, and fault/default behavior",
+        "LED supply voltage, available current budget, source identity, overcurrent protection, measurement method, and reviewer/source reference",
+        "dummy-load or high-impedance measurement plan, dummy load value or instrument impedance, current-sense test point, current-limit calculation, and pass/fail threshold",
+        "first low-current LED test approval with current setpoint, pulse width or duty cycle, duration, temperature observation plan, stop criteria, and reviewer approval"
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "id": "pin_mapping.mks.pa9.green_gate",
+      "category": "pin_mapping",
+      "subject": "MKS Robin Mini V2.0 PA9 gate assignment",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pin": "PA9",
+        "connector_label": "WiFi TXD1",
+        "signal": "GREEN LED gate",
+        "channel": "AF_GREEN",
+        "polarity": "positive"
+      },
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ]
+    },
+    {
+      "id": "pin_mapping.mks.pa10.red_gate",
+      "category": "pin_mapping",
+      "subject": "MKS Robin Mini V2.0 PA10 gate assignment",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pin": "PA10",
+        "connector_label": "WiFi RXD1",
+        "signal": "RED LED gate",
+        "channel": "AF_RED",
+        "polarity": "positive"
+      },
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ]
+    },
+    {
+      "id": "pin_mapping.mks.pb13.white_gate",
+      "category": "pin_mapping",
+      "subject": "MKS Robin Mini V2.0 PB13 gate assignment",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pin": "PB13",
+        "connector_label": "TC1 SCK",
+        "signal": "WHITE LED gate",
+        "channel": "WHITE_BF",
+        "polarity": "positive"
+      },
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ]
+    },
+    {
+      "id": "pin_mapping.mks.pd6.camera_trigger",
+      "category": "pin_mapping",
+      "subject": "MKS Robin Mini V2.0 PD6 camera/sync trigger assignment",
+      "status": "known",
+      "value": {
+        "controller": "MKS Robin Mini V2.0",
+        "pin": "PD6",
+        "connector_label": "E0_STEP",
+        "signal": "camera/sync trigger",
+        "channel": "CAMERA_TRIGGER"
+      },
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ]
+    },
+    {
+      "id": "output_type.camera_trigger",
+      "category": "output_type",
+      "subject": "Camera trigger electrical output type",
+      "status": "unknown",
+      "unknown_reason": "The camera trigger driver topology, voltage domain, source/sink behavior, drive strength, and protection or level shifting have not been recorded.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "driver topology",
+        "voltage domain",
+        "source, sink, push-pull, open-drain, optocoupled, or buffered behavior",
+        "drive strength or current limit",
+        "protection or level-shifting design",
+        "reviewed source for the exact target circuit"
+      ]
+    },
+    {
+      "id": "output_type.af_red_led_gate",
+      "category": "output_type",
+      "subject": "AF_RED LED gate electrical output type",
+      "status": "unknown",
+      "unknown_reason": "The red LED gate driver output type, voltage domain, source/sink behavior, drive strength, and protection or buffering have not been recorded.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "driver topology",
+        "voltage domain",
+        "source, sink, push-pull, open-drain, optocoupled, or buffered behavior",
+        "drive strength or current limit",
+        "gate polarity",
+        "reviewed source for the exact target circuit"
+      ]
+    },
+    {
+      "id": "output_type.af_green_led_gate",
+      "category": "output_type",
+      "subject": "AF_GREEN LED gate electrical output type",
+      "status": "unknown",
+      "unknown_reason": "The green LED gate driver output type, voltage domain, source/sink behavior, drive strength, and protection or buffering have not been recorded.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "driver topology",
+        "voltage domain",
+        "source, sink, push-pull, open-drain, optocoupled, or buffered behavior",
+        "drive strength or current limit",
+        "gate polarity",
+        "reviewed source for the exact target circuit"
+      ]
+    },
+    {
+      "id": "output_type.white_bf_led_gate",
+      "category": "output_type",
+      "subject": "WHITE_BF LED gate electrical output type",
+      "status": "unknown",
+      "unknown_reason": "The white LED gate driver output type, voltage domain, source/sink behavior, drive strength, and protection or buffering have not been recorded.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "driver topology",
+        "voltage domain",
+        "source, sink, push-pull, open-drain, optocoupled, or buffered behavior",
+        "drive strength or current limit",
+        "gate polarity",
+        "reviewed source for the exact target circuit"
+      ]
+    },
+    {
+      "id": "led_current_limit.af_red",
+      "category": "led_current_limit",
+      "subject": "AF_RED maximum safe LED current",
+      "status": "unknown",
+      "unknown_reason": "Installed LED part number, forward voltage, thermal path, and safe current have not been measured or datasheet-verified.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "nonzero_current_setpoint",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "installed red LED part number or traceable identification",
+        "forward voltage at intended current",
+        "maximum safe continuous and pulsed current",
+        "thermal path and temperature limit",
+        "hardware current-limit calculation and measured current-sense result"
+      ]
+    },
+    {
+      "id": "led_current_limit.af_green",
+      "category": "led_current_limit",
+      "subject": "AF_GREEN maximum safe LED current",
+      "status": "unknown",
+      "unknown_reason": "Installed LED part number, forward voltage, thermal path, and safe current have not been measured or datasheet-verified.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "nonzero_current_setpoint",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "installed green LED part number or traceable identification",
+        "forward voltage at intended current",
+        "maximum safe continuous and pulsed current",
+        "thermal path and temperature limit",
+        "hardware current-limit calculation and measured current-sense result"
+      ]
+    },
+    {
+      "id": "led_current_limit.white_bf",
+      "category": "led_current_limit",
+      "subject": "WHITE_BF maximum safe LED current",
+      "status": "unknown",
+      "unknown_reason": "White LED safe current and thermal limits have not been measured or datasheet-verified.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "nonzero_current_setpoint",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "installed white LED part number or traceable identification",
+        "forward voltage at intended current",
+        "maximum safe continuous and pulsed current",
+        "thermal path and temperature limit",
+        "hardware current-limit calculation and measured current-sense result"
+      ]
+    },
+    {
+      "id": "rail_limit.led_supply_voltage",
+      "category": "rail_limit",
+      "subject": "LED supply rail voltage",
+      "status": "unknown",
+      "unknown_reason": "LED supply rail voltage has not been recorded in this evidence set.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "LED supply source identity",
+        "measured unloaded and loaded voltage",
+        "measurement point",
+        "meter or instrument used",
+        "reviewed source or bench record"
+      ]
+    },
+    {
+      "id": "rail_limit.led_supply_current_budget",
+      "category": "rail_limit",
+      "subject": "LED supply rail current budget",
+      "status": "unknown",
+      "unknown_reason": "Available supply current budget has not been measured or otherwise verified.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "nonzero_current_setpoint",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "available supply current budget",
+        "expected worst-case channel current draw",
+        "overcurrent protection or fuse behavior",
+        "wire and connector current rating",
+        "reviewed source or bench record"
+      ]
+    },
+    {
+      "id": "rail_limit.controller_board_led_rail",
+      "category": "rail_limit",
+      "subject": "Controller-board LED rail suitability",
+      "status": "unknown",
+      "unknown_reason": "Controller-board low-voltage rail voltage and current budget have not been verified for LED use.",
+      "evidence_refs": [
+        "electronics/led-driver/requirements.md",
+        "electronics/led-driver/rev-a-direct-drive.md"
+      ],
+      "blocks": [
+        "controller_board_powered_led_use",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "controller-board rail identity",
+        "rail voltage",
+        "available current budget",
+        "permitted external-load use",
+        "reviewed source for the exact controller board"
+      ]
+    },
+    {
+      "id": "pin_mapping.driver.af_red_led_connector",
+      "category": "pin_mapping",
+      "subject": "AF_RED driver output to physical LED connector mapping",
+      "status": "unknown",
+      "unknown_reason": "Driver output connector/channel wiring to the physical red LED has not been recorded in this evidence set.",
+      "evidence_refs": [],
+      "blocks": [
+        "actual_led_connection",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "driver output connector label",
+        "physical red LED connector label",
+        "wire color or harness identifier",
+        "continuity or reviewed schematic evidence",
+        "review note tying the mapping to the exact hardware"
+      ]
+    },
+    {
+      "id": "pin_mapping.driver.af_green_led_connector",
+      "category": "pin_mapping",
+      "subject": "AF_GREEN driver output to physical LED connector mapping",
+      "status": "unknown",
+      "unknown_reason": "Driver output connector/channel wiring to the physical green LED has not been recorded in this evidence set.",
+      "evidence_refs": [],
+      "blocks": [
+        "actual_led_connection",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "driver output connector label",
+        "physical green LED connector label",
+        "wire color or harness identifier",
+        "continuity or reviewed schematic evidence",
+        "review note tying the mapping to the exact hardware"
+      ]
+    },
+    {
+      "id": "pin_mapping.driver.white_bf_led_connector",
+      "category": "pin_mapping",
+      "subject": "WHITE_BF driver output to physical LED connector mapping",
+      "status": "unknown",
+      "unknown_reason": "Driver output connector/channel wiring to the physical white LED has not been recorded in this evidence set.",
+      "evidence_refs": [],
+      "blocks": [
+        "actual_led_connection",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "driver output connector label",
+        "physical white LED connector label",
+        "wire color or harness identifier",
+        "continuity or reviewed schematic evidence",
+        "review note tying the mapping to the exact hardware"
+      ]
+    },
+    {
+      "id": "output_state.mks_led_gates_at_boot",
+      "category": "output_state",
+      "subject": "MKS LED gate default state at boot/reset",
+      "status": "unknown",
+      "unknown_reason": "MKS gate default state has not been verified in this evidence set.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "red, green, and white gate voltage at boot",
+        "red, green, and white gate voltage during reset",
+        "pull-up or pull-down behavior",
+        "whether each gate can enable current during boot/reset",
+        "measurement point and instrument"
+      ]
+    },
+    {
+      "id": "output_state.camera_trigger_at_boot",
+      "category": "output_state",
+      "subject": "Camera trigger output state at boot/reset",
+      "status": "unknown",
+      "unknown_reason": "Camera trigger output voltage, polarity, and pulse/glitch behavior at controller boot/reset have not been verified.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md",
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "trigger output voltage at boot",
+        "trigger output voltage during reset",
+        "active polarity",
+        "glitch or pulse observation window",
+        "measurement point and oscilloscope settings"
+      ]
+    },
+    {
+      "id": "output_state.arduino_pwm_at_boot_reset",
+      "category": "output_state",
+      "subject": "Arduino PWM output state at boot/reset",
+      "status": "unknown",
+      "unknown_reason": "Arduino boot/reset PWM output electrical state has not been verified at the LED driver input.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "red, green, and white PWM pin voltage at boot",
+        "red, green, and white PWM pin voltage during reset",
+        "filtered VREF voltage at boot/reset",
+        "EEPROM/default setpoint behavior",
+        "measurement point and instrument"
+      ]
+    },
+    {
+      "id": "output_state.led_driver_fault_default",
+      "category": "output_state",
+      "subject": "LED driver fault/default output current",
+      "status": "unknown",
+      "unknown_reason": "LED driver fault and default current behavior has not been reviewed or measured in this evidence set.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "nonzero_current_setpoint",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "driver fault-mode output current",
+        "driver default output current with gate inactive",
+        "driver default output current with setpoint input disconnected",
+        "current-sense test point",
+        "reviewed datasheet or bench measurement"
+      ]
+    },
+    {
+      "id": "camera_trigger_behavior.electrical_compatibility",
+      "category": "camera_trigger_behavior",
+      "subject": "Camera trigger electrical compatibility",
+      "status": "unknown",
+      "unknown_reason": "Camera trigger voltage, polarity, pulse-width requirement, current limit, and protection or level shifting have not been recorded for the target camera.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "target camera trigger input specification",
+        "required trigger voltage",
+        "active polarity",
+        "minimum and maximum pulse width",
+        "input current or impedance",
+        "protection, buffer, level-shifter, or optocoupler design",
+        "oscilloscope test point"
+      ]
+    },
+    {
+      "id": "camera_trigger_behavior.boot_reset_state",
+      "category": "camera_trigger_behavior",
+      "subject": "Camera trigger boot/reset behavior",
+      "status": "unknown",
+      "unknown_reason": "The camera trigger line has not been observed during controller boot/reset with the camera disconnected.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "camera disconnected dummy-signal setup",
+        "boot/reset waveform capture",
+        "idle state after firmware startup",
+        "absence or bounded effect of unwanted pulses",
+        "oscilloscope settings and trigger point"
+      ]
+    },
+    {
+      "id": "test_prerequisite.dummy_load_led_driver",
+      "category": "test_prerequisite",
+      "subject": "Dummy-load or high-impedance LED-driver prerequisite",
+      "status": "unknown",
+      "unknown_reason": "A dummy-load or high-impedance LED-driver test plan has not been recorded before actual LED connection.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate",
+        "actual_led_connection",
+        "nonzero_current_setpoint"
+      ],
+      "evidence_fields_required": [
+        "dummy load value or high-impedance instrument input",
+        "expected current or voltage at the first nonzero setpoint",
+        "current-sense test point",
+        "pass/fail threshold",
+        "stop criteria",
+        "reviewer approval before actual LED connection"
+      ]
+    },
+    {
+      "id": "test_prerequisite.low_current_led_test",
+      "category": "test_prerequisite",
+      "subject": "First low-current actual LED test prerequisite",
+      "status": "unknown",
+      "unknown_reason": "The first actual LED test current, pulse width or duty cycle, duration, temperature observation plan, and stop criteria have not been recorded.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate",
+        "actual_led_connection",
+        "nonzero_current_setpoint"
+      ],
+      "evidence_fields_required": [
+        "approved initial current setpoint",
+        "pulse width or duty cycle",
+        "test duration",
+        "temperature observation point and limit",
+        "current-sense measurement",
+        "stop criteria",
+        "reviewer approval before actual LED connection"
+      ]
+    },
+    {
+      "id": "approval.actual_led_connection",
+      "category": "approval",
+      "subject": "Approval to connect actual LEDs",
+      "status": "unknown",
+      "unknown_reason": "Required current limits, rail limits, output defaults, and wiring checks are not complete in this evidence set.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "all LED current-limit entries resolved by evidence",
+        "all LED rail-limit entries resolved by evidence",
+        "all LED output-type and boot/reset-state entries resolved by evidence",
+        "dummy-load prerequisite resolved by evidence",
+        "low-current LED test prerequisite resolved by evidence",
+        "reviewer approval record"
+      ]
+    },
+    {
+      "id": "approval.camera_trigger_connection",
+      "category": "approval",
+      "subject": "Approval to connect camera trigger input",
+      "status": "unknown",
+      "unknown_reason": "Camera trigger electrical compatibility, output type, boot/reset behavior, dummy-signal plan, and protection or level shifting have not been recorded as reviewed.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md"
+      ],
+      "blocks": [
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "camera trigger electrical compatibility resolved by evidence",
+        "camera trigger output type resolved by evidence",
+        "camera trigger boot/reset state resolved by evidence",
+        "camera disconnected dummy-signal plan",
+        "oscilloscope test point",
+        "reviewer approval record"
+      ]
+    },
+    {
+      "id": "approval.nonzero_led_current_setpoint",
+      "category": "approval",
+      "subject": "Approval to request nonzero LED current setpoints",
+      "status": "unknown",
+      "unknown_reason": "Safe current limits and hardware current limiting have not been recorded as reviewed and measured.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "nonzero_current_setpoint",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "hardware current limit resolved by evidence for the target channel",
+        "rail voltage and current budget resolved by evidence",
+        "driver output type and fault/default behavior resolved by evidence",
+        "dummy-load prerequisite resolved by evidence",
+        "approved initial setpoint below measured safe value",
+        "reviewer approval record"
+      ]
+    },
+    {
+      "id": "approval.common_reference_or_isolation_plan",
+      "category": "approval",
+      "subject": "Reviewed common reference or isolation plan",
+      "status": "unknown",
+      "unknown_reason": "Common reference or isolation plan has not been recorded as reviewed in this evidence set.",
+      "evidence_refs": [
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "actual_led_connection",
+        "trigger_led_no_guess_gate"
+      ],
+      "evidence_fields_required": [
+        "common reference or isolation topology",
+        "logic voltage compatibility",
+        "fault-current path review",
+        "measurement plan for shared grounds or isolation barrier",
+        "reviewer approval record"
+      ]
+    }
+  ]
+}

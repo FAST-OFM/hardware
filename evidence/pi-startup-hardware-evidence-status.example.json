@@ -1,0 +1,1087 @@
+{
+  "schema_version": "evidence-status/v1",
+  "document_id": "pi-startup-hardware-evidence-status",
+  "description": "Offline evidence-status snapshot for prerequisites to lift the Raspberry Pi startup hardware_evidence_unknown blocker. This file is documentation/data only and does not approve firmware flashing, GPIO, motor, LED, camera, serial, network, or live-controller action.",
+  "required_unknowns": [
+    "controller_identity.exact_board_revision",
+    "controller_identity.exact_mcu_part",
+    "firmware_path.flash_debug_method",
+    "pin_mapping.motion.x_axis",
+    "pin_mapping.motion.y_axis",
+    "pin_mapping.motion.z_axis",
+    "pin_mapping.endstop_inputs",
+    "homing_capability.x_axis",
+    "homing_capability.y_axis",
+    "homing_capability.z_axis",
+    "rail_limit.controller_power_rails",
+    "rail_limit.motor_supply_current_budget",
+    "rail_limit.led_supply_voltage",
+    "rail_limit.led_supply_current_budget",
+    "output_state.controller_boot_reset",
+    "output_state.motor_driver_enable_at_boot",
+    "led_load_behavior.af_red",
+    "led_load_behavior.af_green",
+    "led_load_behavior.white_bf",
+    "camera_trigger_behavior.electrical_compatibility",
+    "camera_trigger_behavior.boot_reset_state",
+    "approval.pi_startup_hardware_evidence",
+    "approval.no_motion_electrical_live_test",
+    "approval.motion_or_homing_live_test",
+    "approval.led_live_test",
+    "approval.camera_trigger_live_test"
+  ],
+  "unknown_blocker_summary": {
+    "scope": "pi_startup_hardware_evidence_unknown",
+    "summary_status": "blocked_by_unknowns",
+    "unknown_entry_ids": [
+      "controller_identity.exact_board_revision",
+      "controller_identity.exact_mcu_part",
+      "firmware_path.flash_debug_method",
+      "pin_mapping.motion.x_axis",
+      "pin_mapping.motion.y_axis",
+      "pin_mapping.motion.z_axis",
+      "pin_mapping.endstop_inputs",
+      "homing_capability.x_axis",
+      "homing_capability.y_axis",
+      "homing_capability.z_axis",
+      "rail_limit.controller_power_rails",
+      "rail_limit.motor_supply_current_budget",
+      "rail_limit.led_supply_voltage",
+      "rail_limit.led_supply_current_budget",
+      "output_state.controller_boot_reset",
+      "output_state.motor_driver_enable_at_boot",
+      "led_load_behavior.af_red",
+      "led_load_behavior.af_green",
+      "led_load_behavior.white_bf",
+      "camera_trigger_behavior.electrical_compatibility",
+      "camera_trigger_behavior.boot_reset_state",
+      "approval.pi_startup_hardware_evidence",
+      "approval.no_motion_electrical_live_test",
+      "approval.motion_or_homing_live_test",
+      "approval.led_live_test",
+      "approval.camera_trigger_live_test"
+    ],
+    "blockers": [
+      {
+        "id": "pi_startup_hardware_evidence_unknown",
+        "title": "Pi startup hardware evidence remains unknown",
+        "blocked_by": [
+          "controller_identity.exact_board_revision",
+          "controller_identity.exact_mcu_part",
+          "firmware_path.flash_debug_method",
+          "pin_mapping.motion.x_axis",
+          "pin_mapping.motion.y_axis",
+          "pin_mapping.motion.z_axis",
+          "pin_mapping.endstop_inputs",
+          "homing_capability.x_axis",
+          "homing_capability.y_axis",
+          "homing_capability.z_axis",
+          "rail_limit.controller_power_rails",
+          "rail_limit.motor_supply_current_budget",
+          "rail_limit.led_supply_voltage",
+          "rail_limit.led_supply_current_budget",
+          "output_state.controller_boot_reset",
+          "output_state.motor_driver_enable_at_boot",
+          "led_load_behavior.af_red",
+          "led_load_behavior.af_green",
+          "led_load_behavior.white_bf",
+          "camera_trigger_behavior.electrical_compatibility",
+          "camera_trigger_behavior.boot_reset_state",
+          "approval.pi_startup_hardware_evidence"
+        ],
+        "blocks": [
+          "pi_startup_real_hardware_mode",
+          "pi_startup_serial_or_network_controller_access",
+          "firmware_flash_or_live_controller_probe",
+          "gpio_toggle_from_pi_startup",
+          "motor_driver_enable_or_motion",
+          "led_output_drive",
+          "camera_trigger_output"
+        ],
+        "resolution_evidence_required": "Record exact target board identity, MCU identity, flash/debug path, motion and endstop mappings, homing capability, rail limits, boot/reset output states, LED loaded behavior, camera trigger behavior, and reviewed approval before Pi startup can leave hardware_evidence_unknown for real hardware.",
+        "evidence_fields_required": [
+          "exact target controller board revision and variant evidence",
+          "exact MCU part evidence",
+          "reviewed flash/debug method for the exact target",
+          "X/Y/Z step, direction, enable, and endstop mapping evidence",
+          "homing source and safe homing capability evidence for X/Y/Z",
+          "controller, motor, and LED rail voltage/current budget evidence",
+          "controller and motor-driver boot/reset/default-state evidence",
+          "LED current-limit and loaded-behavior evidence for each channel",
+          "camera trigger voltage, polarity, pulse-width, and default-state evidence",
+          "reviewed no-live-action approval record"
+        ]
+      },
+      {
+        "id": "no_motion_electrical_live_test_gate",
+        "title": "No-motion electrical live tests are not approved",
+        "blocked_by": [
+          "controller_identity.exact_board_revision",
+          "controller_identity.exact_mcu_part",
+          "firmware_path.flash_debug_method",
+          "rail_limit.controller_power_rails",
+          "output_state.controller_boot_reset",
+          "approval.no_motion_electrical_live_test"
+        ],
+        "blocks": [
+          "firmware_flash_or_live_controller_probe",
+          "gpio_voltage_measurement_under_control",
+          "serial_or_network_live_controller_access"
+        ],
+        "resolution_evidence_required": "Record exact target identity, reviewed flash/debug method, rail limits, boot/reset states, common-reference or isolation plan, test points, and explicit review before any no-motion live electrical test.",
+        "evidence_fields_required": [
+          "exact target controller board revision and MCU part",
+          "reviewed flashing/debug path and rollback path",
+          "pin voltage levels and input/output tolerance",
+          "boot/reset default state of candidate outputs",
+          "common reference or isolation plan",
+          "rail voltage/current budgets",
+          "test point list and measurement equipment plan",
+          "explicit reviewer approval for no-motion live electrical tests"
+        ]
+      },
+      {
+        "id": "motion_or_homing_live_test_gate",
+        "title": "Motion and homing live tests are not approved",
+        "blocked_by": [
+          "pin_mapping.motion.x_axis",
+          "pin_mapping.motion.y_axis",
+          "pin_mapping.motion.z_axis",
+          "pin_mapping.endstop_inputs",
+          "homing_capability.x_axis",
+          "homing_capability.y_axis",
+          "homing_capability.z_axis",
+          "rail_limit.motor_supply_current_budget",
+          "output_state.motor_driver_enable_at_boot",
+          "approval.motion_or_homing_live_test"
+        ],
+        "blocks": [
+          "motor_driver_enable_or_motion",
+          "homing_input_test",
+          "axis_direction_test",
+          "z_motion_test"
+        ],
+        "resolution_evidence_required": "Record verified motion pins, endstop or homing inputs, driver current limits, safe low-speed limits, emergency stop or power-off path, and Z collision review before any live motion or homing test.",
+        "evidence_fields_required": [
+          "X/Y/Z step, direction, and enable pin evidence",
+          "endstop or homing input pin evidence",
+          "driver type, current limit, Vref, and thermal-margin evidence",
+          "homing source and repeatability plan",
+          "reduced-current and reduced-speed test limits",
+          "axis direction and soft-limit plan",
+          "emergency stop or power-off path",
+          "separate Z slide/objective collision review",
+          "explicit reviewer approval for motion or homing live tests"
+        ]
+      },
+      {
+        "id": "led_live_test_gate",
+        "title": "LED live tests are not approved",
+        "blocked_by": [
+          "rail_limit.led_supply_voltage",
+          "rail_limit.led_supply_current_budget",
+          "led_load_behavior.af_red",
+          "led_load_behavior.af_green",
+          "led_load_behavior.white_bf",
+          "output_state.controller_boot_reset",
+          "approval.led_live_test"
+        ],
+        "blocks": [
+          "actual_led_connection",
+          "nonzero_led_current_setpoint",
+          "led_output_drive"
+        ],
+        "resolution_evidence_required": "Record LED current limits, rail limits, driver input polarity, fault/default behavior, boot/reset output states, dummy-load plan, current-sense test point, and explicit review before any LED live test.",
+        "evidence_fields_required": [
+          "installed LED part or measured safe-current evidence",
+          "series/current-sense resistor values",
+          "LED supply rail voltage and current budget",
+          "driver input polarity and fault/default behavior",
+          "controller LED gate boot/reset state",
+          "dummy-load or high-impedance measurement plan",
+          "LED current-sense test point",
+          "temperature observation plan for first low-current test",
+          "explicit reviewer approval for LED live tests"
+        ]
+      },
+      {
+        "id": "camera_trigger_live_test_gate",
+        "title": "Camera trigger live tests are not approved",
+        "blocked_by": [
+          "camera_trigger_behavior.electrical_compatibility",
+          "camera_trigger_behavior.boot_reset_state",
+          "output_state.controller_boot_reset",
+          "approval.camera_trigger_live_test"
+        ],
+        "blocks": [
+          "camera_trigger_connection",
+          "camera_trigger_output",
+          "position_indexed_trigger_test"
+        ],
+        "resolution_evidence_required": "Record camera trigger voltage, polarity, pulse-width requirements, protection/level shifting, boot/reset state, oscilloscope test point, and explicit review before any camera trigger live test.",
+        "evidence_fields_required": [
+          "camera trigger voltage requirement",
+          "camera trigger polarity requirement",
+          "camera trigger pulse-width requirement",
+          "protection, level-shifter, buffer, or optocoupler design",
+          "trigger output boot/reset state",
+          "oscilloscope test point",
+          "initial dummy-signal plan with camera disconnected",
+          "explicit reviewer approval for camera trigger live tests"
+        ]
+      }
+    ]
+  },
+  "live_action_gates": [
+    {
+      "id": "pi_startup_real_hardware_gate",
+      "title": "Pi startup real-hardware path",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.pi_startup_hardware_evidence",
+        "controller_identity.exact_board_revision",
+        "firmware_path.flash_debug_method",
+        "output_state.controller_boot_reset"
+      ],
+      "prohibited_actions": [
+        "lifting hardware_evidence_unknown for Pi startup real-hardware mode",
+        "opening serial or network sessions to a live controller from Pi startup",
+        "firmware flashing from Pi startup",
+        "GPIO toggling from Pi startup",
+        "motor driver enable, motion, or homing from Pi startup",
+        "LED output drive from Pi startup",
+        "camera trigger output from Pi startup"
+      ],
+      "evidence_fields_required": [
+        "all pi_startup_hardware_evidence_unknown blocker fields resolved by reviewed evidence",
+        "explicit startup-mode approval record",
+        "simulator/dry-run remains the only allowed startup path until approval"
+      ]
+    },
+    {
+      "id": "no_motion_electrical_live_test_gate",
+      "title": "No-motion electrical live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.no_motion_electrical_live_test",
+        "controller_identity.exact_board_revision",
+        "controller_identity.exact_mcu_part",
+        "firmware_path.flash_debug_method",
+        "rail_limit.controller_power_rails",
+        "output_state.controller_boot_reset"
+      ],
+      "prohibited_actions": [
+        "firmware flashing",
+        "GPIO toggling",
+        "serial or network live-controller control",
+        "probing under controller command"
+      ],
+      "evidence_fields_required": [
+        "exact target board identity",
+        "exact MCU identity",
+        "reviewed flash/debug path",
+        "voltage levels and tolerances",
+        "rail budgets",
+        "boot/reset states",
+        "common-reference or isolation plan",
+        "test point plan",
+        "explicit reviewer approval"
+      ]
+    },
+    {
+      "id": "no_load_output_live_test_gate",
+      "title": "No-load output live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.no_motion_electrical_live_test",
+        "controller_identity.exact_board_revision",
+        "controller_identity.exact_mcu_part",
+        "firmware_path.flash_debug_method",
+        "rail_limit.controller_power_rails",
+        "output_state.controller_boot_reset",
+        "output_state.motor_driver_enable_at_boot"
+      ],
+      "prohibited_actions": [
+        "commanding candidate outputs into a no-load measurement setup",
+        "observing commanded output behavior under live controller control",
+        "boot/reset waveform capture on live candidate outputs",
+        "probing any output unless all loads are disconnected or unable to respond"
+      ],
+      "evidence_fields_required": [
+        "exact target board and MCU identity",
+        "reviewed firmware and command path for the named output",
+        "known rail voltage levels and instrument loading limits",
+        "boot/reset state evidence for the named output class",
+        "test point and pass/fail threshold plan",
+        "proof that motors, LEDs, camera trigger input, and other loads are disconnected or unable to respond",
+        "explicit reviewer approval for the exact no-load output test"
+      ]
+    },
+    {
+      "id": "motion_or_homing_live_test_gate",
+      "title": "Motion or homing live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.motion_or_homing_live_test",
+        "pin_mapping.motion.x_axis",
+        "pin_mapping.motion.y_axis",
+        "pin_mapping.motion.z_axis",
+        "pin_mapping.endstop_inputs",
+        "homing_capability.x_axis",
+        "homing_capability.y_axis",
+        "homing_capability.z_axis",
+        "rail_limit.motor_supply_current_budget",
+        "output_state.motor_driver_enable_at_boot"
+      ],
+      "prohibited_actions": [
+        "motor driver enable",
+        "step pulse generation",
+        "axis motion",
+        "homing input test",
+        "hard-stop or sensorless homing",
+        "Z motion"
+      ],
+      "evidence_fields_required": [
+        "verified motion and endstop mappings",
+        "driver current-limit and thermal-margin evidence",
+        "safe reduced-current and reduced-speed limits",
+        "homing source evidence",
+        "emergency stop or power-off path",
+        "Z collision review",
+        "explicit reviewer approval"
+      ]
+    },
+    {
+      "id": "motion_live_test_gate",
+      "title": "Motion live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.motion_or_homing_live_test",
+        "pin_mapping.motion.x_axis",
+        "pin_mapping.motion.y_axis",
+        "pin_mapping.motion.z_axis",
+        "rail_limit.motor_supply_current_budget",
+        "output_state.motor_driver_enable_at_boot"
+      ],
+      "prohibited_actions": [
+        "motor driver enable",
+        "step pulse generation",
+        "axis direction test",
+        "axis motion",
+        "Z motion without separate collision review"
+      ],
+      "evidence_fields_required": [
+        "verified step, direction, and enable mappings for the selected axis",
+        "driver current-limit and thermal-margin evidence",
+        "safe reduced-current, reduced-speed, distance, and timeout limits",
+        "other axes disabled or otherwise prevented from motion",
+        "emergency stop or power-off path",
+        "explicit reviewer approval naming the selected axis"
+      ]
+    },
+    {
+      "id": "v1_manual_centered_bounded_test_gate",
+      "title": "V1 manual-centered bounded X/Y and Z-focus test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.motion_or_homing_live_test",
+        "pin_mapping.motion.x_axis",
+        "pin_mapping.motion.y_axis",
+        "rail_limit.motor_supply_current_budget",
+        "output_state.motor_driver_enable_at_boot"
+      ],
+      "prohibited_actions": [
+        "homing input test",
+        "homing move",
+        "hard-stop or sensorless homing",
+        "travel outside +/-10 mm from manual X/Y center",
+        "Z motion outside approved focus-search range",
+        "camera trigger output outside approved camera-trigger scope",
+        "LED output outside approved lighting scope"
+      ],
+      "evidence_fields_required": [
+        "manual center setup record",
+        "X/Y step, direction, and enable mappings",
+        "X/Y +/-10 mm soft envelope from manual center",
+        "initial X/Y speed 0.5-1 mm/s and acceleration 5-10 mm/s^2 or stricter limits",
+        "Z focus-search range and collision review when Z is in scope",
+        "homing commands disabled and prohibited",
+        "Fluidd emergency stop and physical power removal stop path",
+        "lighting scope, including whether white constant illumination is allowed",
+        "camera-trigger scope, including whether XVS is disconnected, dummy-loaded, or connected",
+        "explicit reviewer approval naming V1 manual-centered bounded test"
+      ]
+    },
+    {
+      "id": "homing_live_test_gate",
+      "title": "Homing live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.motion_or_homing_live_test",
+        "pin_mapping.endstop_inputs",
+        "homing_capability.x_axis",
+        "homing_capability.y_axis",
+        "homing_capability.z_axis",
+        "output_state.motor_driver_enable_at_boot"
+      ],
+      "prohibited_actions": [
+        "homing input test under live controller control",
+        "hard-stop approach",
+        "sensorless homing",
+        "homing move",
+        "Z homing without separate collision review"
+      ],
+      "evidence_fields_required": [
+        "selected homing source and input behavior for the named axis",
+        "verified endstop or feedback input mapping",
+        "safe speed, current, distance, timeout, and backoff limits",
+        "repeatability test plan",
+        "false-positive and false-negative risk review",
+        "separate Z slide/objective collision review when Z is in scope",
+        "explicit reviewer approval naming the selected axis and homing source"
+      ]
+    },
+    {
+      "id": "led_live_test_gate",
+      "title": "LED live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.led_live_test",
+        "rail_limit.led_supply_voltage",
+        "rail_limit.led_supply_current_budget",
+        "led_load_behavior.af_red",
+        "led_load_behavior.af_green",
+        "led_load_behavior.white_bf",
+        "output_state.controller_boot_reset"
+      ],
+      "prohibited_actions": [
+        "actual LED connection",
+        "nonzero LED current setpoint",
+        "LED output drive",
+        "LED load test"
+      ],
+      "evidence_fields_required": [
+        "installed LED safe-current evidence",
+        "driver current-limit evidence",
+        "LED rail budget evidence",
+        "driver input polarity evidence",
+        "fault/default behavior evidence",
+        "dummy-load or high-impedance plan",
+        "current-sense test point",
+        "explicit reviewer approval"
+      ]
+    },
+    {
+      "id": "camera_trigger_live_test_gate",
+      "title": "Camera trigger live test",
+      "status": "prohibited_by_unknowns",
+      "approved": false,
+      "executed": false,
+      "blocked_by": [
+        "approval.camera_trigger_live_test",
+        "camera_trigger_behavior.electrical_compatibility",
+        "camera_trigger_behavior.boot_reset_state",
+        "output_state.controller_boot_reset"
+      ],
+      "prohibited_actions": [
+        "camera trigger connection",
+        "camera trigger output",
+        "position-indexed trigger test with camera connected"
+      ],
+      "evidence_fields_required": [
+        "camera trigger voltage, polarity, and pulse-width evidence",
+        "protection or level-shifting design",
+        "boot/reset trigger state evidence",
+        "oscilloscope test point",
+        "dummy-signal plan with camera disconnected",
+        "explicit reviewer approval"
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "id": "controller_identity.exact_board_revision",
+      "category": "controller_identity",
+      "subject": "Exact target controller board revision and scanner variant",
+      "status": "unknown",
+      "unknown_reason": "Checked-in docs record a bounded MKS Robin Mini V2.0 scanner context, but the exact target board revision and MKS/Kingroon variant relationship have not been recorded as verified for Pi startup hardware use.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/board.md",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "no_motion_electrical_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "photo or purchase record for the exact target controller board",
+        "board silkscreen, PCB code, revision, and variant notes",
+        "review note binding the evidence to the hardware used by Pi startup"
+      ]
+    },
+    {
+      "id": "controller_identity.exact_mcu_part",
+      "category": "controller_identity",
+      "subject": "Exact target MCU part",
+      "status": "unknown",
+      "unknown_reason": "Current docs record STM32F103-family evidence from a Klipper deployment, but the exact MCU part for the target board has not been recorded.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "no_motion_electrical_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "MCU package marking or reviewed board documentation",
+        "voltage domain evidence",
+        "review note tying the MCU evidence to the target board"
+      ]
+    },
+    {
+      "id": "firmware_path.flash_debug_method",
+      "category": "firmware_path",
+      "subject": "Reviewed flash/debug method for the exact target controller",
+      "status": "unknown",
+      "unknown_reason": "No reviewed firmware flashing/debug procedure for the exact target board is recorded in this evidence set.",
+      "evidence_refs": [
+        "docs/controller-discovery/controller-board-discovery.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "no_motion_electrical_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "flash/debug connector or bootloader method",
+        "known-good backup or rollback path",
+        "power and isolation constraints",
+        "reviewer approval before any live flashing"
+      ]
+    },
+    {
+      "id": "pin_mapping.motion.x_axis",
+      "category": "pin_mapping",
+      "subject": "X-axis step, direction, enable, and endstop mapping",
+      "status": "unknown",
+      "unknown_reason": "X-axis motion pins and endstop input have not been verified in checked-in evidence.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/board.md",
+        "boards/mks-robin-mini-v2-scanner/pins.yaml"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "X step pin",
+        "X direction pin",
+        "X enable pin",
+        "X endstop or homing input pin",
+        "pin voltage/tolerance evidence",
+        "reviewed source for each mapping"
+      ]
+    },
+    {
+      "id": "pin_mapping.motion.y_axis",
+      "category": "pin_mapping",
+      "subject": "Y-axis step, direction, enable, and endstop mapping",
+      "status": "unknown",
+      "unknown_reason": "Y-axis motion pins and endstop input have not been verified in checked-in evidence.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/board.md",
+        "boards/mks-robin-mini-v2-scanner/pins.yaml"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "Y step pin",
+        "Y direction pin",
+        "Y enable pin",
+        "Y endstop or homing input pin",
+        "pin voltage/tolerance evidence",
+        "reviewed source for each mapping"
+      ]
+    },
+    {
+      "id": "pin_mapping.motion.z_axis",
+      "category": "pin_mapping",
+      "subject": "Z-axis step, direction, enable, and endstop mapping",
+      "status": "unknown",
+      "unknown_reason": "Z-axis motion pins and endstop input have not been verified in checked-in evidence.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/board.md",
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "mechanics/homing/README.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "Z step pin",
+        "Z direction pin",
+        "Z enable pin",
+        "Z endstop or homing input pin",
+        "Z collision-risk review",
+        "pin voltage/tolerance evidence",
+        "reviewed source for each mapping"
+      ]
+    },
+    {
+      "id": "pin_mapping.endstop_inputs",
+      "category": "pin_mapping",
+      "subject": "Endstop input pins and electrical behavior",
+      "status": "unknown",
+      "unknown_reason": "Endstop pins, pull-ups or pull-downs, active polarity, and wiring have not been verified in checked-in evidence.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "endstop input pins",
+        "active polarity",
+        "pull-up or pull-down behavior",
+        "input voltage/tolerance evidence",
+        "wiring and strain-relief evidence"
+      ]
+    },
+    {
+      "id": "homing_capability.x_axis",
+      "category": "homing_capability",
+      "subject": "X-axis homing capability",
+      "status": "unknown",
+      "unknown_reason": "No X-axis homing source, input behavior, repeatability evidence, or safe test approval is recorded.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/pico-sensorless-homing-feasibility.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "selected homing source",
+        "homing input or feedback evidence",
+        "low-speed and reduced-current limits",
+        "false positive/false negative risk review",
+        "repeatability test plan"
+      ]
+    },
+    {
+      "id": "homing_capability.y_axis",
+      "category": "homing_capability",
+      "subject": "Y-axis homing capability",
+      "status": "unknown",
+      "unknown_reason": "No Y-axis homing source, input behavior, repeatability evidence, or safe test approval is recorded.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/pico-sensorless-homing-feasibility.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "selected homing source",
+        "homing input or feedback evidence",
+        "low-speed and reduced-current limits",
+        "false positive/false negative risk review",
+        "repeatability test plan"
+      ]
+    },
+    {
+      "id": "homing_capability.z_axis",
+      "category": "homing_capability",
+      "subject": "Z-axis homing capability",
+      "status": "unknown",
+      "unknown_reason": "No Z-axis homing source, input behavior, repeatability evidence, safe test approval, or slide/objective collision review is recorded.",
+      "evidence_refs": [
+        "mechanics/homing/README.md",
+        "mechanics/homing/pico-sensorless-homing-feasibility.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "selected Z homing source",
+        "homing input or feedback evidence",
+        "low-speed and reduced-current limits",
+        "false positive/false negative risk review",
+        "slide/objective collision review",
+        "repeatability test plan"
+      ]
+    },
+    {
+      "id": "rail_limit.controller_power_rails",
+      "category": "rail_limit",
+      "subject": "Controller power rails and logic voltage levels",
+      "status": "unknown",
+      "unknown_reason": "Controller rail voltages, logic voltage levels, current budgets, and input/output tolerances have not been recorded for Pi startup hardware use.",
+      "evidence_refs": [
+        "docs/hardware-safety-guardrails.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "no_motion_electrical_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "logic voltage levels",
+        "input/output tolerance",
+        "available current budget",
+        "common-reference or isolation plan",
+        "reviewed measurement source"
+      ]
+    },
+    {
+      "id": "rail_limit.motor_supply_current_budget",
+      "category": "rail_limit",
+      "subject": "Motor supply current budget and driver current limits",
+      "status": "unknown",
+      "unknown_reason": "Motor supply current budget, driver Vref/current-limit settings, and thermal margin are not recorded in this evidence set.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/board.md",
+        "boards/mks-robin-mini-v2-scanner/pins.yaml",
+        "docs/controller-discovery/controller-discovery-status.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "motor supply voltage",
+        "available current budget",
+        "driver current limit or Vref",
+        "thermal-margin review",
+        "reduced-current first-test limit"
+      ]
+    },
+    {
+      "id": "rail_limit.led_supply_voltage",
+      "category": "rail_limit",
+      "subject": "LED supply rail voltage for startup-controlled LED paths",
+      "status": "unknown",
+      "unknown_reason": "LED supply rail voltage has not been recorded in this Pi startup evidence set.",
+      "evidence_refs": [
+        "evidence/rev-a5-evidence-status.example.json",
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "led_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "LED supply rail voltage",
+        "measurement source",
+        "review note for the startup-controlled hardware path"
+      ]
+    },
+    {
+      "id": "rail_limit.led_supply_current_budget",
+      "category": "rail_limit",
+      "subject": "LED supply current budget for startup-controlled LED paths",
+      "status": "unknown",
+      "unknown_reason": "LED supply current budget has not been measured or otherwise verified in this Pi startup evidence set.",
+      "evidence_refs": [
+        "evidence/rev-a5-evidence-status.example.json",
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "led_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "LED supply current budget",
+        "driver current-limit evidence",
+        "safe first-test current limit",
+        "review note for the startup-controlled hardware path"
+      ]
+    },
+    {
+      "id": "output_state.controller_boot_reset",
+      "category": "output_state",
+      "subject": "Controller candidate output states at boot/reset",
+      "status": "unknown",
+      "unknown_reason": "Boot/reset states for candidate motion, LED, and camera trigger outputs have not been verified for Pi startup hardware use.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/board.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md",
+        "evidence/rev-a5-evidence-status.example.json"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "no_motion_electrical_live_test_gate",
+        "led_live_test_gate",
+        "camera_trigger_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "boot/reset state for motion step outputs",
+        "boot/reset state for motor enable outputs",
+        "boot/reset state for LED gate outputs",
+        "boot/reset state for trigger output",
+        "measurement method and test point list"
+      ]
+    },
+    {
+      "id": "output_state.motor_driver_enable_at_boot",
+      "category": "output_state",
+      "subject": "Motor driver enable state at boot/reset",
+      "status": "unknown",
+      "unknown_reason": "Motor driver enable default state at controller boot/reset has not been verified.",
+      "evidence_refs": [
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "driver enable pin mapping",
+        "boot/reset enable state",
+        "safe disabled state evidence",
+        "reviewed mitigation if default state is unsafe"
+      ]
+    },
+    {
+      "id": "led_load_behavior.af_red",
+      "category": "led_load_behavior",
+      "subject": "AF_RED LED loaded behavior and current limiting",
+      "status": "unknown",
+      "unknown_reason": "AF_RED loaded behavior, safe current, thermal behavior, and driver current limit have not been recorded for startup hardware use.",
+      "evidence_refs": [
+        "evidence/rev-a5-evidence-status.example.json",
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "led_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "installed LED part or measured safe current",
+        "driver current limit",
+        "sense resistor value",
+        "loaded gate behavior",
+        "first-test temperature observation plan"
+      ]
+    },
+    {
+      "id": "led_load_behavior.af_green",
+      "category": "led_load_behavior",
+      "subject": "AF_GREEN LED loaded behavior and current limiting",
+      "status": "unknown",
+      "unknown_reason": "AF_GREEN loaded behavior, safe current, thermal behavior, and driver current limit have not been recorded for startup hardware use.",
+      "evidence_refs": [
+        "evidence/rev-a5-evidence-status.example.json",
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "led_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "installed LED part or measured safe current",
+        "driver current limit",
+        "sense resistor value",
+        "loaded gate behavior",
+        "first-test temperature observation plan"
+      ]
+    },
+    {
+      "id": "led_load_behavior.white_bf",
+      "category": "led_load_behavior",
+      "subject": "WHITE_BF LED loaded behavior and current limiting",
+      "status": "unknown",
+      "unknown_reason": "WHITE_BF loaded behavior, safe current, thermal behavior, and driver current limit have not been recorded for startup hardware use.",
+      "evidence_refs": [
+        "evidence/rev-a5-evidence-status.example.json",
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "led_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "installed LED part or measured safe current",
+        "driver current limit",
+        "sense resistor value",
+        "loaded gate behavior",
+        "first-test temperature observation plan"
+      ]
+    },
+    {
+      "id": "camera_trigger_behavior.electrical_compatibility",
+      "category": "camera_trigger_behavior",
+      "subject": "Camera trigger voltage, polarity, pulse width, and protection",
+      "status": "unknown",
+      "unknown_reason": "Camera trigger voltage, polarity, pulse-width requirements, and protection or level shifting have not been verified for startup hardware use.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md",
+        "boards/mks-robin-mini-v2-scanner/board.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "camera_trigger_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "camera trigger voltage requirement",
+        "trigger polarity",
+        "pulse-width requirement",
+        "protection, buffer, level-shifter, or optocoupler design",
+        "oscilloscope test point"
+      ]
+    },
+    {
+      "id": "camera_trigger_behavior.boot_reset_state",
+      "category": "camera_trigger_behavior",
+      "subject": "Camera trigger output state at boot/reset",
+      "status": "unknown",
+      "unknown_reason": "Camera trigger candidate output state during controller boot/reset has not been verified.",
+      "evidence_refs": [
+        "electronics/camera-trigger/README.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown",
+        "camera_trigger_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "boot/reset trigger output state",
+        "inactive trigger level at camera interface",
+        "reviewed mitigation if boot/reset state can trigger the camera"
+      ]
+    },
+    {
+      "id": "approval.pi_startup_hardware_evidence",
+      "category": "approval",
+      "subject": "Approval to lift Pi startup hardware_evidence_unknown for real hardware",
+      "status": "unknown",
+      "unknown_reason": "Required controller identity, flash/debug path, pin mapping, homing, rail-limit, boot/reset-state, LED, and camera trigger evidence remain incomplete.",
+      "evidence_refs": [
+        "docs/pi-startup-hardware-evidence-prerequisites.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "pi_startup_hardware_evidence_unknown"
+      ],
+      "evidence_fields_required": [
+        "all prerequisite entries moved from unknown only after evidence is added",
+        "review record naming the hardware revision and startup mode",
+        "explicit confirmation that simulator/dry-run remains default until review"
+      ]
+    },
+    {
+      "id": "approval.no_motion_electrical_live_test",
+      "category": "approval",
+      "subject": "Approval for no-motion electrical live tests",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval record exists for no-motion live electrical tests.",
+      "evidence_refs": [
+        "docs/pi-startup-hardware-evidence-prerequisites.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md"
+      ],
+      "blocks": [
+        "no_motion_electrical_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "exact test scope",
+        "power/isolation plan",
+        "measurement points",
+        "operator stop conditions",
+        "reviewer approval"
+      ]
+    },
+    {
+      "id": "approval.motion_or_homing_live_test",
+      "category": "approval",
+      "subject": "Approval for motion or homing live tests",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval record exists for motion or homing live tests.",
+      "evidence_refs": [
+        "docs/pi-startup-hardware-evidence-prerequisites.md",
+        "boards/mks-robin-mini-v2-scanner/safe-test-plan.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "motion_or_homing_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "axis and homing scope",
+        "reduced-current and reduced-speed limits",
+        "emergency stop or power-off path",
+        "Z collision review if Z is in scope",
+        "reviewer approval"
+      ]
+    },
+    {
+      "id": "approval.led_live_test",
+      "category": "approval",
+      "subject": "Approval for LED live tests",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval record exists for LED live tests.",
+      "evidence_refs": [
+        "docs/pi-startup-hardware-evidence-prerequisites.md",
+        "electronics/led-driver/rev-a5-arduino-pwm-brightness-controller.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "led_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "LED channel scope",
+        "safe current limit",
+        "dummy-load or initial-current plan",
+        "temperature observation plan",
+        "reviewer approval"
+      ]
+    },
+    {
+      "id": "approval.camera_trigger_live_test",
+      "category": "approval",
+      "subject": "Approval for camera trigger live tests",
+      "status": "unknown",
+      "unknown_reason": "No reviewed approval record exists for camera trigger live tests.",
+      "evidence_refs": [
+        "docs/pi-startup-hardware-evidence-prerequisites.md",
+        "electronics/camera-trigger/README.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "camera_trigger_live_test_gate"
+      ],
+      "evidence_fields_required": [
+        "trigger electrical scope",
+        "camera disconnected dummy-signal plan",
+        "protection/level-shifting review",
+        "oscilloscope capture plan",
+        "reviewer approval"
+      ]
+    }
+  ]
+}

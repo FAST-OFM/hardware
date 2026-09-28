@@ -1,0 +1,289 @@
+{
+  "schema_version": "evidence-status/v1",
+  "document_id": "encoder-readiness-evidence-status",
+  "description": "Offline non-live evidence-status snapshot for future linear encoder readiness unknowns and blockers. This file is documentation/data only and is not a hardware test procedure.",
+  "required_unknowns": [
+    "encoder_part.x_axis",
+    "encoder_part.y_axis",
+    "encoder_part.resolution_counts_per_mm",
+    "encoder_signal_interface.output_signal_type",
+    "encoder_mechanical_mount.x_axis",
+    "encoder_mechanical_mount.y_axis",
+    "encoder_mechanical_mount.readhead_clearance",
+    "encoder_signal_interface.cable_routing_noise_clearance",
+    "encoder_signal_interface.index_reference_signal",
+    "encoder_signal_interface.counter_input_mapping",
+    "encoder_calibration.axis_sign",
+    "encoder_calibration.image_transform",
+    "approval.encoder_readiness"
+  ],
+  "unknown_blocker_summary": {
+    "scope": "future_linear_encoder_readiness",
+    "summary_status": "blocked_by_unknowns",
+    "unknown_entry_ids": [
+      "encoder_part.x_axis",
+      "encoder_part.y_axis",
+      "encoder_part.resolution_counts_per_mm",
+      "encoder_signal_interface.output_signal_type",
+      "encoder_mechanical_mount.x_axis",
+      "encoder_mechanical_mount.y_axis",
+      "encoder_mechanical_mount.readhead_clearance",
+      "encoder_signal_interface.cable_routing_noise_clearance",
+      "encoder_signal_interface.index_reference_signal",
+      "encoder_signal_interface.counter_input_mapping",
+      "encoder_calibration.axis_sign",
+      "encoder_calibration.image_transform",
+      "approval.encoder_readiness"
+    ],
+    "blockers": [
+      {
+        "id": "encoder_part_selection",
+        "title": "Encoder part selection is not evidence-backed",
+        "blocked_by": [
+          "encoder_part.x_axis",
+          "encoder_part.y_axis",
+          "encoder_part.resolution_counts_per_mm",
+          "encoder_signal_interface.output_signal_type",
+          "approval.encoder_readiness"
+        ],
+        "blocks": [
+          "mechanical_mount_finalization",
+          "readhead_mount_finalization",
+          "controller_interface_selection",
+          "encoder_count_metadata_contract"
+        ],
+        "resolution_evidence_required": "Record selected encoder model evidence for both axes, resolution evidence, and output signal type evidence before treating encoder readiness as known."
+      },
+      {
+        "id": "mechanical_integration",
+        "title": "Encoder mechanical integration is not evidence-backed",
+        "blocked_by": [
+          "encoder_mechanical_mount.x_axis",
+          "encoder_mechanical_mount.y_axis",
+          "encoder_mechanical_mount.readhead_clearance",
+          "approval.encoder_readiness"
+        ],
+        "blocks": [
+          "mount_fabrication",
+          "axis_travel_verification",
+          "encoder_scale_alignment"
+        ],
+        "resolution_evidence_required": "Record reviewed mounting surfaces, readhead clearance, scale alignment constraints, and travel-clearance evidence before treating mechanical integration as known."
+      },
+      {
+        "id": "signal_and_cabling",
+        "title": "Encoder signal and cabling plan is not evidence-backed",
+        "blocked_by": [
+          "encoder_signal_interface.cable_routing_noise_clearance",
+          "encoder_signal_interface.index_reference_signal",
+          "encoder_signal_interface.counter_input_mapping",
+          "approval.encoder_readiness"
+        ],
+        "blocks": [
+          "diagnostic_readout",
+          "hybrid_logging",
+          "encoder_triggering"
+        ],
+        "resolution_evidence_required": "Record cable routing, shielding or spacing, index/reference signal handling, and counter input mapping evidence before enabling encoder readout work."
+      },
+      {
+        "id": "calibration_readiness",
+        "title": "Encoder-to-image calibration is not evidence-backed",
+        "blocked_by": [
+          "encoder_calibration.axis_sign",
+          "encoder_calibration.image_transform",
+          "approval.encoder_readiness"
+        ],
+        "blocks": [
+          "measured_coordinate_metadata",
+          "qa_from_encoder_counts",
+          "encoder_indexed_triggering"
+        ],
+        "resolution_evidence_required": "Record axis sign, coordinate transform, and image-coordinate calibration evidence before using encoder counts as coordinate truth."
+      }
+    ]
+  },
+  "entries": [
+    {
+      "id": "encoder_part.x_axis",
+      "category": "encoder_part",
+      "subject": "X-axis encoder selected part",
+      "status": "unknown",
+      "unknown_reason": "No selected X-axis encoder model, datasheet, installed part, or measurement evidence is recorded in this evidence set.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "encoder_part_selection"
+      ]
+    },
+    {
+      "id": "encoder_part.y_axis",
+      "category": "encoder_part",
+      "subject": "Y-axis encoder selected part",
+      "status": "unknown",
+      "unknown_reason": "No selected Y-axis encoder model, datasheet, installed part, or measurement evidence is recorded in this evidence set.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "encoder_part_selection"
+      ]
+    },
+    {
+      "id": "encoder_part.resolution_counts_per_mm",
+      "category": "encoder_part",
+      "subject": "Encoder resolution in counts per millimeter",
+      "status": "unknown",
+      "unknown_reason": "Encoder resolution has not been selected, measured, or datasheet-verified in this evidence set.",
+      "evidence_refs": [
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "encoder_part_selection"
+      ]
+    },
+    {
+      "id": "encoder_signal_interface.output_signal_type",
+      "category": "encoder_signal_interface",
+      "subject": "Encoder output signal type and electrical levels",
+      "status": "unknown",
+      "unknown_reason": "Output signal type, voltage levels, and electrical interface requirements have not been selected or verified in this evidence set.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "encoder_part_selection"
+      ]
+    },
+    {
+      "id": "encoder_mechanical_mount.x_axis",
+      "category": "encoder_mechanical_mount",
+      "subject": "X-axis encoder scale and readhead mounting plan",
+      "status": "unknown",
+      "unknown_reason": "X-axis scale location, readhead bracket, stiffness, and travel clearance have not been documented as reviewed.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "mechanical_integration"
+      ]
+    },
+    {
+      "id": "encoder_mechanical_mount.y_axis",
+      "category": "encoder_mechanical_mount",
+      "subject": "Y-axis encoder scale and readhead mounting plan",
+      "status": "unknown",
+      "unknown_reason": "Y-axis scale location, readhead bracket, stiffness, and travel clearance have not been documented as reviewed.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "mechanical_integration"
+      ]
+    },
+    {
+      "id": "encoder_mechanical_mount.readhead_clearance",
+      "category": "encoder_mechanical_mount",
+      "subject": "Encoder readhead clearance through full axis travel",
+      "status": "unknown",
+      "unknown_reason": "Readhead clearance and collision-free travel have not been measured or otherwise verified in this evidence set.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md"
+      ],
+      "blocks": [
+        "mechanical_integration"
+      ]
+    },
+    {
+      "id": "encoder_signal_interface.cable_routing_noise_clearance",
+      "category": "encoder_signal_interface",
+      "subject": "Encoder cable routing and noise clearance",
+      "status": "unknown",
+      "unknown_reason": "Cable path, strain relief, shielding, and separation from noisy motor or LED power wiring have not been documented as reviewed.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "docs/hardware-safety-guardrails.md"
+      ],
+      "blocks": [
+        "signal_and_cabling"
+      ]
+    },
+    {
+      "id": "encoder_signal_interface.index_reference_signal",
+      "category": "encoder_signal_interface",
+      "subject": "Encoder index/reference signal handling",
+      "status": "unknown",
+      "unknown_reason": "Presence, polarity, electrical behavior, and intended handling of an index/reference signal have not been recorded.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md"
+      ],
+      "blocks": [
+        "signal_and_cabling"
+      ]
+    },
+    {
+      "id": "encoder_signal_interface.counter_input_mapping",
+      "category": "encoder_signal_interface",
+      "subject": "Counter or controller input mapping for encoder signals",
+      "status": "unknown",
+      "unknown_reason": "No counter interface, controller input mapping, or external counter path is recorded in this evidence set.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "signal_and_cabling"
+      ]
+    },
+    {
+      "id": "encoder_calibration.axis_sign",
+      "category": "encoder_calibration",
+      "subject": "Encoder count sign relative to scanner axes",
+      "status": "unknown",
+      "unknown_reason": "The sign convention between encoder counts and scanner X/Y axes has not been measured or documented.",
+      "evidence_refs": [
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "calibration_readiness"
+      ]
+    },
+    {
+      "id": "encoder_calibration.image_transform",
+      "category": "encoder_calibration",
+      "subject": "Encoder-to-image coordinate transform",
+      "status": "unknown",
+      "unknown_reason": "No calibration evidence maps encoder counts to image coordinates or tile placement in this evidence set.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "calibration_readiness"
+      ]
+    },
+    {
+      "id": "approval.encoder_readiness",
+      "category": "approval",
+      "subject": "Approval to treat encoder path as ready for non-simulator work",
+      "status": "unknown",
+      "unknown_reason": "Part selection, mechanical integration, signal/cabling plan, and calibration evidence remain incomplete.",
+      "evidence_refs": [
+        "mechanics/encoders/README.md",
+        "mechanics/encoders/encoder-integration-plan.md"
+      ],
+      "blocks": [
+        "encoder_part_selection",
+        "mechanical_integration",
+        "signal_and_cabling",
+        "calibration_readiness"
+      ]
+    }
+  ]
+}
